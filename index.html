@@ -4,89 +4,7 @@
         <title>Xadrez</title>
         <link rel="stylesheet" href="normalize.css">
         <link rel="stylesheet" href="index.css">
-        <script type="text/javascript">
-            window.addEventListener('load', function(){
-                
-                //LINHAS DO TABULEIRO
-                var line_1, line_2;
-                
-                
-                //FOR QUE PERCORRERÁ DUAS VEZES, PARA COLOCAR OS DOIS TIMES(TIME PRETO E TIME BRANCO)
-                for(var j = 0; j<2;j++){
-                    //VARIÁVEL QUE INFORMARÁ A COR DA PEÇA
-                    var color;
-                    if(j == 0){
-                        color = "white";
-                        line_1 = document.getElementById('row_1');
-                        line_2 = document.getElementById('row_2');
-                        
-                    }else if(j == 1){
-                        color = "black";
-                        line_1 = document.getElementById('row_8');
-                        line_2 = document.getElementById('row_7');
-                    }     
-                    //FOR QUE PERCORRERÁ 16 VEZES PARA QUE PEÇAS DE UM TIME SEJAM COLOCADAS
-                    for(var i = 0; i < (line_1.children.length) * 2; i++){
-                        var link_imagem;
-                        //CAMPO FLAG QUE AVISARÁ PARA O PROGRAMA QUE PASSAMOS PARA A SEGUNDA LINHA(A DOS PEÕES)
-                        var line = 'l1';
-                        switch(true){
-                            //TORRES
-                            case (i==0 || i==7):
-                                link_imagem = "img/if_" + color + "_rook.png";
-                            break;
-
-                            //CAVALOS
-                            case (i==1 || i==6):
-                                link_imagem = "img/if_" + color + "_knight.png";
-                            break;
-
-                            //BISPOS
-                            case (i==2 || i==5):
-                                link_imagem = "img/if_" + color + "_bishop.png";
-                            break;
-
-                            //RAINHA    
-                            case (i==3):
-                                link_imagem = "img/if_" + color + "_queen.png";
-                            break;
-
-                            //REI
-                            case (i==4):
-                                link_imagem = "img/if_" + color + "_king.png";
-                            break;
-
-                            //PEÕES
-                            case (i>7 && i<16):
-                                link_imagem = "img/if_" + color + "_pawn.png";
-                                line = 'l2';
-                            break;
-
-                        }
-                        //CRIANDO ELEMENTO IMG
-                        var img = document.createElement("img");
-                        //CRIANDO ATRIBUTO SRC PARA IMG
-                        var src = document.createAttribute("src");
-                        //SETANDO SRC COM LINK DA IMAGEM
-                        src.value = link_imagem;
-                        //ADICIONANDO ATRIBUTO À IMG
-                        img.setAttributeNode(src);
-                        
-                        //ADICIONANDO IMG À CÉLULA
-                        if(line == "l1"){
-                            line_1.children[i].appendChild(img);   
-                        }else if(line == "l2"){
-                            //O - 8 É PARA COMPENSAR O i, POIS FOR RODARÁ O DOBRO DE VEZES DO NUMERO DE CASAS DE UMA LINHA
-                            //ASSIM O ÍNDICE DA CASA FICARÁ CORRETO
-                            line_2.children[i - 8].appendChild(img);     
-                        }
-
-                    }
-                }
-                
-            });
-                
-        </script>
+        <script type="text/javascript" src="motor.js"></script>
     </head>
     <body>
         <div class="container">
@@ -183,5 +101,14 @@
         <footer>
             Jogo desenvolvido por <a href="#">Bruno Mendes Pimenta</a>. Icones de <a href="https://www.iconfinder.com/iconsets/chess-7">Yuri Mazursky</a>.
         </footer>
+        
+        <script>
+            //EVENTOS
+            window.addEventListener('load', function(){
+                iniciarJogo();
+                
+            });
+        
+        </script>
     </body>
 </html>
