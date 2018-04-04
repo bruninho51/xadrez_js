@@ -8,93 +8,99 @@
     </head>
     <body>
         <div class="container">
+            
+            <!--CAMPO QUE MOSTRA PARA PROGRAMA SE JOGADA ESTÁ SENDO EXECUTADA-->
+            <input type="hidden" value="0" id="jogada">
+            <!--CAMPO QUE MOSTRA PARA PROGRAMA, DE QUEM É A VEZ-->
+            <input type="hidden" value="white" id="vez">
+            
             <table border="1" id="tabuleiro" name="tabuleiro">
                 <tr class="row" id="row_1" name="row_1">
-                    <td class="cel cel_a" id="row_1_cel_a"></td>
-                    <td class="cel cel_b" id="row_1_cel_b"></td>
-                    <td class="cel cel_c" id="row_1_cel_c"></td>
-                    <td class="cel cel_d" id="row_1_cel_d"></td>
-                    <td class="cel cel_e" id="row_1_cel_e"></td>
-                    <td class="cel cel_f" id="row_1_cel_f"></td>
-                    <td class="cel cel_g" id="row_1_cel_g"></td>
-                    <td class="cel cel_h" id="row_1_cel_h"></td>
+                    <td class="cel cel_a" id="row_1-cel_1"></td>
+                    <td class="cel cel_b" id="row_1-cel_2"></td>
+                    <td class="cel cel_c" id="row_1-cel_3"></td>
+                    <td class="cel cel_d" id="row_1-cel_4"></td>
+                    <td class="cel cel_e" id="row_1-cel_5"></td>
+                    <td class="cel cel_f" id="row_1-cel_6"></td>
+                    <td class="cel cel_g" id="row_1-cel_7"></td>
+                    <td class="cel cel_h" id="row_1-cel_8"></td>
                 </tr>
                 
                 <tr class="row" id="row_2">
-                    <td class="cel cel_a" id="row_2_cel_a"></td>
-                    <td class="cel cel_b" id="row_2_cel_b"></td>
-                    <td class="cel cel_c" id="row_2_cel_c"></td>
-                    <td class="cel cel_d" id="row_2_cel_d"></td>
-                    <td class="cel cel_e" id="row_2_cel_e"></td>
-                    <td class="cel cel_f" id="row_2_cel_f"></td>
-                    <td class="cel cel_g" id="row_2_cel_g"></td>
-                    <td class="cel cel_h" id="row_2_cel_h"></td>
+                    <td class="cel cel_a" id="row_2-cel_1"></td>
+                    <td class="cel cel_b" id="row_2-cel_2"></td>
+                    <td class="cel cel_c" id="row_2-cel_3"></td>
+                    <td class="cel cel_d" id="row_2-cel_4"></td>
+                    <td class="cel cel_e" id="row_2-cel_5"></td>
+                    <td class="cel cel_f" id="row_2-cel_6"></td>
+                    <td class="cel cel_g" id="row_2-cel_7"></td>
+                    <td class="cel cel_h" id="row_2-cel_8"></td>
                 </tr>
                 
                 <tr class="row" id="row_3">
-                    <td class="cel cel_a" id="row_3_cel_a"></td>
-                    <td class="cel cel_b" id="row_3_cel_b"></td>
-                    <td class="cel cel_c" id="row_3_cel_c"></td>
-                    <td class="cel cel_d" id="row_3_cel_d"></td>
-                    <td class="cel cel_e" id="row_3_cel_e"></td>
-                    <td class="cel cel_f" id="row_3_cel_f"></td>
-                    <td class="cel cel_g" id="row_3_cel_g"></td>
-                    <td class="cel cel_h" id="row_3_cel_h"></td>
+                    <td class="cel cel_a" id="row_3-cel_1"></td>
+                    <td class="cel cel_b" id="row_3-cel_2"></td>
+                    <td class="cel cel_c" id="row_3-cel_3"></td>
+                    <td class="cel cel_d" id="row_3-cel_4"></td>
+                    <td class="cel cel_e" id="row_3-cel_5"></td>
+                    <td class="cel cel_f" id="row_3-cel_6"></td>
+                    <td class="cel cel_g" id="row_3-cel_7"></td>
+                    <td class="cel cel_h" id="row_3-cel_8"></td>
                 </tr>
                 
                 <tr class="row" id="row_4">
-                    <td class="cel cel_a" id="row_4_cel_a"></td>
-                    <td class="cel cel_b" id="row_4_cel_b"></td>
-                    <td class="cel cel_c" id="row_4_cel_c"></td>
-                    <td class="cel cel_d" id="row_4_cel_d"></td>
-                    <td class="cel cel_e" id="row_4_cel_e"></td>
-                    <td class="cel cel_f" id="row_4_cel_f"></td>
-                    <td class="cel cel_g" id="row_4_cel_g"></td>
-                    <td class="cel cel_h" id="row_4_cel_h"></td>
+                    <td class="cel cel_a" id="row_4-cel_1"></td>
+                    <td class="cel cel_b" id="row_4-cel_2"></td>
+                    <td class="cel cel_c" id="row_4-cel_3"></td>
+                    <td class="cel cel_d" id="row_4-cel_4"></td>
+                    <td class="cel cel_e" id="row_4-cel_5"></td>
+                    <td class="cel cel_f" id="row_4-cel_6"></td>
+                    <td class="cel cel_g" id="row_4-cel_7"></td>
+                    <td class="cel cel_h" id="row_4-cel_8"></td>
                 </tr>
                 
                 <tr class="row" id="row_5">
-                    <td class="cel cel_a" id="row_5_cel_a"></td>
-                    <td class="cel cel_b" id="row_5_cel_b"></td>
-                    <td class="cel cel_c" id="row_5_cel_c"></td>
-                    <td class="cel cel_d" id="row_5_cel_d"></td>
-                    <td class="cel cel_e" id="row_5_cel_e"></td>
-                    <td class="cel cel_f" id="row_5_cel_f"></td>
-                    <td class="cel cel_g" id="row_5_cel_g"></td>
-                    <td class="cel cel_h" id="row_5_cel_h"></td>
+                    <td class="cel cel_a" id="row_5-cel_1"></td>
+                    <td class="cel cel_b" id="row_5-cel_2"></td>
+                    <td class="cel cel_c" id="row_5-cel_3"></td>
+                    <td class="cel cel_d" id="row_5-cel_4"></td>
+                    <td class="cel cel_e" id="row_5-cel_5"></td>
+                    <td class="cel cel_f" id="row_5-cel_6"></td>
+                    <td class="cel cel_g" id="row_5-cel_7"></td>
+                    <td class="cel cel_h" id="row_5-cel_8"></td>
                 </tr>
                 
                 <tr class="row" id="row_6">
-                    <td class="cel cel_a" id="row_6_cel_a"></td>
-                    <td class="cel cel_b" id="row_6_cel_b"></td>
-                    <td class="cel cel_c" id="row_6_cel_c"></td>
-                    <td class="cel cel_d" id="row_6_cel_d"></td>
-                    <td class="cel cel_e" id="row_6_cel_e"></td>
-                    <td class="cel cel_f" id="row_6_cel_f"></td>
-                    <td class="cel cel_g" id="row_6_cel_g"></td>
-                    <td class="cel cel_h" id="row_6_cel_h"></td>
+                    <td class="cel cel_a" id="row_6-cel_1"></td>
+                    <td class="cel cel_b" id="row_6-cel_2"></td>
+                    <td class="cel cel_c" id="row_6-cel_3"></td>
+                    <td class="cel cel_d" id="row_6-cel_4"></td>
+                    <td class="cel cel_e" id="row_6-cel_5"></td>
+                    <td class="cel cel_f" id="row_6-cel_6"></td>
+                    <td class="cel cel_g" id="row_6-cel_7"></td>
+                    <td class="cel cel_h" id="row_6-cel_8"></td>
                 </tr>
                 
                 <tr class="row" id="row_7">
-                    <td class="cel cel_a" id="row_7_cel_a"></td>
-                    <td class="cel cel_b" id="row_7_cel_b"></td>
-                    <td class="cel cel_c" id="row_7_cel_c"></td>
-                    <td class="cel cel_d" id="row_7_cel_d"></td>
-                    <td class="cel cel_e" id="row_7_cel_e"></td>
-                    <td class="cel cel_f" id="row_7_cel_f"></td>
-                    <td class="cel cel_g" id="row_7_cel_g"></td>
-                    <td class="cel cel_h" id="row_7_cel_h"></td>
+                    <td class="cel cel_a" id="row_7-cel_1"></td>
+                    <td class="cel cel_b" id="row_7-cel_2"></td>
+                    <td class="cel cel_c" id="row_7-cel_3"></td>
+                    <td class="cel cel_d" id="row_7-cel_4"></td>
+                    <td class="cel cel_e" id="row_7-cel_5"></td>
+                    <td class="cel cel_f" id="row_7-cel_6"></td>
+                    <td class="cel cel_g" id="row_7-cel_7"></td>
+                    <td class="cel cel_h" id="row_7-cel_8"></td>
                 </tr>
                 
                 <tr class="row" id="row_8">
-                    <td class="cel cel_a" id="row_8_cel_a"></td>
-                    <td class="cel cel_b" id="row_8_cel_b"></td>
-                    <td class="cel cel_c" id="row_8_cel_c"></td>
-                    <td class="cel cel_d" id="row_8_cel_d"></td>
-                    <td class="cel cel_e" id="row_8_cel_e"></td>
-                    <td class="cel cel_f" id="row_8_cel_f"></td>
-                    <td class="cel cel_g" id="row_8_cel_g"></td>
-                    <td class="cel cel_h" id="row_8_cel_h"></td>
+                    <td class="cel cel_a" id="row_8-cel_1"></td>
+                    <td class="cel cel_b" id="row_8-cel_2"></td>
+                    <td class="cel cel_c" id="row_8-cel_3"></td>
+                    <td class="cel cel_d" id="row_8-cel_4"></td>
+                    <td class="cel cel_e" id="row_8-cel_5"></td>
+                    <td class="cel cel_f" id="row_8-cel_6"></td>
+                    <td class="cel cel_g" id="row_8-cel_7"></td>
+                    <td class="cel cel_h" id="row_8-cel_8"></td>
                 </tr>
             </table>
         </div>

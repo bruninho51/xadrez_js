@@ -106,5 +106,54 @@ function iniciarJogo(){
 }
 
 function choosePiece(){
-    this.style.backgroundColor = "rgb(0,100,0)";
+    //SE UMA JOGADA NÃO ESTIVER SENDO FEITA, PEÇA SERÁ SELECIONADA PARA JOGADA
+    if(document.getElementById("jogada").value == "0"){
+        document.getElementById("jogada").value = "1"; //ATRIBUI CAMPO DE CONTROLE DE JOGADA PARA 1
+        
+        //MARCA PEÇA COM CSS PARA MOSTRAR QUE ELA FOI SELECIONADA PELO JOGADOR
+        this.parentElement.style.backgroundColor = "rgba(0,255,0, 0.9)";
+        this.parentElement.style.border = "2px double yellow";
+        
+        var piece = this.dataset.piece; //NOME DA PEÇA
+        //MOSTRA CAMPOS QUE A PEÇA PODE IR
+        showAvailablePlays(this, piece);
+    }else{
+        alert("JOGADA EM ANDAMENTO");
+    }
+}
+
+function showAvailablePlays(instance, piece){
+    var id_piece, id_row, id_cel;
+    var num_line, num_cel;
+    //PEGANDO ID DA CASA ONDE ESTÁ A PEÇA
+    id_piece = instance.parentElement.id;
+    //USANDO ID PARA PEGAR COORDENADAS DA PEÇA NO TABULEIRO
+    var arr = id_piece.split("-");
+    id_row = arr[0];
+    id_cel = arr[1];
+    //PEGANDO NÚMERO DA LINHA
+    num_line = id_row.split("_")[1];
+    //PEGANDO NÚMERO DA CÉLULA
+    num_cel = id_cel.split("_")[1];
+    
+    //SWITCH RESPONSÁVEL POR VERIFICAR O TIPO DE PEÇA ESCOLHIDA E QUAIS SÃO OS MOVIMENTOS POSSÍVEIS PARA ELA
+    //IRÁ MARCAR AS CASAS CUJA PEÇA PODE IR
+    switch(piece){
+        case "peao":
+            for(i=(num_cel-1);i<(num_cel-1)+3;i++){
+                //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS CUJO MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
+                var possibility = document.getElementById("row_"+ (+num_line+1) + "-cel_"+i);
+                
+                if(possibility == null){
+                    continue;
+                }
+                posibility.style.backgroundColor = "yellow";
+            }
+        break;
+    }
+}
+
+//FUNÇÃO RESPONSÁVEL POR ANÁLISAR E FAZER A JOGADA
+function makeMove(){
+    
 }
