@@ -147,7 +147,7 @@ function showAvailablePlays(instance, piece){
                 if(possibility == null){
                     continue;
                 }
-                posibility.style.backgroundColor = "yellow";
+                possibility.style.backgroundColor = "yellow";
             }
         break;
     }
