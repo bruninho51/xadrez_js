@@ -8,7 +8,9 @@ function iniciarJogo(){
     //TIPO DE PEÇA
     var piece_type;
 
-
+    //COLOCARÁ MÉTODO choosePiece EM TODAS AS CASAS DO TABULEIRO
+    putMethodChoosePiece();
+    
     //FOR QUE PERCORRERÁ DUAS VEZES, PARA COLOCAR OS DOIS TIMES(TIME PRETO E TIME BRANCO)
     for(var j = 0; j<2;j++){
         //VARIÁVEL QUE INFORMARÁ A COR DA PEÇA
@@ -87,14 +89,16 @@ function iniciarJogo(){
             img.setAttributeNode(src);
             img.setAttributeNode(piece);
             img.setAttributeNode(time_peca);
+            
             //EVENTO CLICK IMG
-            img.addEventListener("click", function(){
-                choosePiece.call(this);
-            });
+            //img.addEventListener("click", function(){
+            //    choosePiece.call(this);
+            //});
 
             //ADICIONANDO IMG À CÉLULA
             if(line == "l1"){
-                line_1.children[i].appendChild(img);   
+                line_1.children[i].appendChild(img); 
+                
             }else if(line == "l2"){
                 //O - 8 É PARA COMPENSAR O i, POIS FOR RODARÁ O DOBRO DE VEZES DO NUMERO DE CASAS DE UMA LINHA
                 //ASSIM O ÍNDICE DA CASA FICARÁ CORRETO
@@ -103,25 +107,56 @@ function iniciarJogo(){
 
         }
     }
+    
 }
 
 function choosePiece(){
+    //VARIÁVEL QUE RECEBERÁ IMG DA PEÇA, CASO HOUVER
+    var img_piece = this.children[0];
+
     //SE UMA JOGADA NÃO ESTIVER SENDO FEITA, PEÇA SERÁ SELECIONADA PARA JOGADA
     if(document.getElementById("jogada").value == "0"){
-        document.getElementById("jogada").value = "1"; //ATRIBUI CAMPO DE CONTROLE DE JOGADA PARA 1
-        
-        //MARCA PEÇA COM CSS PARA MOSTRAR QUE ELA FOI SELECIONADA PELO JOGADOR
-        this.parentElement.style.backgroundColor = "rgba(0,255,0, 0.9)";
-        this.parentElement.style.border = "2px double yellow";
-        
-        var piece = this.dataset.piece; //NOME DA PEÇA
-        //MOSTRA CAMPOS QUE A PEÇA PODE IR
-        showAvailablePlays(this, piece);
+
+        //VÊ SE img_piece ESTÁ COM undefined.(SE ESTIVER, SIGNIFICA QUE CASA CLICADA NÃO TEM PEÇA)
+        if( !(img_piece == undefined) ){
+
+            //IF QUE VÊ SE A VEZ BATE COM A PEÇA ESCOLHIDA
+            if(img_piece.dataset.time == document.getElementById("vez").value){
+
+                document.getElementById("jogada").value = "1"; //ATRIBUI CAMPO DE CONTROLE DE JOGADA PARA 1
+
+                //MARCA PEÇA COM CSS PARA MOSTRAR QUE ELA FOI SELECIONADA PELO JOGADOR
+                var attr_style = document.createAttribute("style");
+                attr_style.value = "background-color: rgba(0,255,0, 0.9); border: 2px double yellow";
+                img_piece.setAttributeNode(attr_style);
+                //img_piece.parentElement.style.backgroundColor = "rgba(0,255,0, 0.9)";
+                //img_piece.parentElement.style.border = "2px double yellow";
+
+                //CRIANDO ATRIBUTO PARA MARCAR PEÇA COMO SELECIONADA
+                var attr = document.createAttribute("data-select");
+                attr.value = "1";
+                img_piece.setAttributeNode(attr);
+
+                var piece = img_piece.dataset.piece; //NOME DA PEÇA
+                //MOSTRA CAMPOS QUE A PEÇA PODE IR
+                showAvailablePlays(img_piece, piece);
+
+            }else{
+                alert("Escolha uma peça do seu time!");
+            }
+        }
     }else{
-        alert("JOGADA EM ANDAMENTO");
+        if( !(img_piece == undefined) && img_piece.dataset.time == document.getElementById("vez").value){
+            alert("JOGADA EM ANDAMENTO");
+        }else{
+            makeMove(this);
+        }
+
     }
 }
 
+
+//RESPONSÁVEL POR ANÁLISAR JOGADAS DISPONÍVEIS
 function showAvailablePlays(instance, piece){
     var id_piece, id_row, id_cel;
     var num_line, num_cel;
@@ -147,13 +182,70 @@ function showAvailablePlays(instance, piece){
                 if(possibility == null){
                     continue;
                 }
-                possibility.style.backgroundColor = "yellow";
+                
+                //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
+                //possibility.style.backgroundColor = "yellow";
+                
+                //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
+                var attr = document.createAttribute("data-possibility");
+                attr.value = "1";
+                possibility.setAttributeNode(attr);
             }
         break;
     }
 }
 
-//FUNÇÃO RESPONSÁVEL POR ANÁLISAR E FAZER A JOGADA
-function makeMove(){
+//FUNÇÃO RESPONSÁVEL POR FAZER A JOGADA
+function makeMove(casa_escolhida){
+    if(!casa_escolhida.dataset.possibility == "1"){
+        alert("Jogada inválida! Escolha outra casa!");
+    }else{
+        //SELECIONANDO PEÇA ESCOLHIDA PARA JOGADA
+        var selected_piece = document.querySelector("img[data-select='1']");
+        //MOVENDO PEÇA PARA CASA ESCOLHIDA
+        casa_escolhida.appendChild(selected_piece);
+        
+                            //----------------------------------------
+                            //-----LIMPANDO E TERMINANDO A JOGADA-----
+                            //----------------------------------------
+        
+        //REMOVE CSS INLINE DA PEÇA.(ESSE CSS MOSTRAVA QUE A PEÇA FOI SELECIONADA)
+        selected_piece.removeAttribute("style");
+        //LIMPA POSIBILIDADES DE JOGADA
+        var possibilities = document.querySelectorAll("td[data-possibility='1']");
+        possibilities.forEach(function(possibility){
+            possibility.removeAttribute("data-possibility");
+        });
+        //DESSELECIONA PEÇA SELECIONADA ANTERIORMENTE
+        selected_piece.removeAttribute("data-select");
+        //TERMINA A JOGADA
+        document.getElementById("jogada").value = "0";
+        
+                            //----------------------------------------
+                            //----------------------------------------
+        
+        //VEZ DO OUTRO TIME
+        var time_vez;
+        if(document.getElementById("vez").value == "white"){
+            time_vez = "black";
+        }else{
+            time_vez = "white";
+        }
+        document.getElementById("vez").value = time_vez;
+        
+        
+    }
     
+}
+
+//MÉTODO RESPONSÁVEL POR COLOCAR choosePiece MÉTODO EM TODAS AS CASAS DO TABULEIRO
+function putMethodChoosePiece(){
+    for(i=1;i<9;i++){
+        var line = document.getElementById('row_'+i);
+        for(j=0;j<line.children.length;j++){
+            line.children[j].addEventListener("click", function(){
+                choosePiece.call(this);
+            });
+        }
+    }
 }
