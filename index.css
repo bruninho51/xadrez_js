@@ -1,17 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Berkshire+Swash');
+
 *{
     box-sizing: border-box;
     margin: 0;
+    font-family: 'Berkshire Swash', cursive;
 }
 
-table{
-    margin: 0 auto;
-    margin-top: 50px;
+.container{
+    position: relative;
+    background-color: aqua;
+    min-height: 100vh;
+    padding-top: 50px;
+    background: url(background.gif);
 }
+
+
 .cel{
     width: 56px;
     height: 56px;
     cursor: crosshair;
     border: 2px double;
+    background-color: #E3C189;
     
 }
 .cel img{
@@ -20,28 +29,50 @@ table{
 }
 
 #row_1 .cel:nth-child(even){
-    background-color: red;
+    background-color: #A62826;
 }
 #row_2 .cel:nth-child(odd){
-    background-color: red;
+    background-color: #A62826;
 }
 #row_3 .cel:nth-child(even){
-    background-color: red;
+    background-color: #A62826;
 }
 #row_4 .cel:nth-child(odd){
-    background-color: red;
+    background-color: #A62826;
 }
 #row_5 .cel:nth-child(even){
-    background-color: red;
+    background-color: #A62826;
 }
 #row_6 .cel:nth-child(odd){
-    background-color: red;
+    background-color: #A62826;
 }
 #row_7 .cel:nth-child(even){
-    background-color: red;
+    background-color: #A62826;
 }
 #row_8 .cel:nth-child(odd){
-    background-color: red;
+    background-color: #A62826;
+}
+
+#opcoes{
+    width: 300px;
+    height: 460px;
+    border-radius: 5px;
+    border: 2px solid #000;
+    padding: 6px;
+    background-color: #877551;
+    float: left;
+    margin-right: 10px;
+}
+
+#gameBox{
+    margin-left: 310px;
+}
+#vezBox{
+    width: 128px;
+    margin: 0 auto;
+}
+#vezBox h1{
+    line-height: 0.5px;
 }
 
 footer{
@@ -52,6 +83,7 @@ footer{
     background-color: #000080;
     border-top: 10px solid #000070;
     width: 100%;
+    height: 50px;
 }
 footer a{
     font-weight: bold;

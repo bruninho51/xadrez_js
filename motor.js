@@ -158,90 +158,25 @@ function choosePiece(){
 }
 
 //RESPONSÁVEL POR ANÁLISAR JOGADAS DISPONÍVEIS
-function showAvailablePlays(instance, piece){
+function showAvailablePlays(instance_piece, piece){
     var id_piece, id_row, id_cel;
     var num_line, num_cel;
     //PEGANDO ID DA CASA ONDE ESTÁ A PEÇA
-    id_piece = instance.parentElement.id;
+    id_piece = instance_piece.parentElement.id;
     //USANDO ID PARA PEGAR COORDENADAS DA PEÇA NO TABULEIRO
     var arr = id_piece.split("-");
     id_row = arr[0];
     id_cel = arr[1];
-    //PEGANDO NÚMERO DA LINHA
+    //PEGANDO NÚMERO DA LINHA ONDE A PEÇA ESCOLHIDA SE ENCONTRA
     num_line = id_row.split("_")[1];
-    //PEGANDO NÚMERO DA CÉLULA
+    //PEGANDO NÚMERO DA CÉLULA ONDE A PEÇA ESCOLHIDA SE ENCONTRA
     num_cel = id_cel.split("_")[1];
     
     //SWITCH RESPONSÁVEL POR VERIFICAR O TIPO DE PEÇA ESCOLHIDA E QUAIS SÃO OS MOVIMENTOS POSSÍVEIS PARA ELA
     //IRÁ MARCAR AS CASAS CUJA PEÇA PODE IR
     switch(piece){
         case "peao":
-            for(i=(num_cel-1);i<(num_cel-1)+3;i++){
-                //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS CUJO MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
-                //DIMINUI NUM_LINE NO TIME BLACK, POIS OS PEÕES DESSE TIME ANDARÃO NO SENTIDO INVERSO DOS PEÕES DO TIME WHITE
-                if(document.getElementById('vez').value == 'white'){
-                    var possibility = document.getElementById("row_"+ (+num_line+1) + "-cel_"+i);
-                }else if(document.getElementById('vez').value == 'black'){
-                    var possibility = document.getElementById("row_"+ (+num_line-1) + "-cel_"+i);
-                }
-                
-                
-                if(possibility == null){
-                    continue;
-                }
-                
-                //TESTA SE 1 E 3 CASAS COM POSIBILIDADES DE JOGADA POSSUEM PEÇAS DO TIME ADVERSÁRIO, POIS PEÃO SÓ PODE IR NA DIAGONAL SE FOR COMER PEÇAS DO ADVERSÁRIO
-                if(i == (num_cel-1) || i == (num_cel-1)+2 ){
-                    if( (possibility.children[0] == undefined) || possibility.children[0].dataset.time == document.getElementById("vez").value ){
-                        continue;
-                    }  
-                }
-                
-                //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
-                //possibility.style.backgroundColor = "yellow";
-                
-                //SERVIRÁ PARA VERIFICAR SE PEÇA ADVERSÁRIA OBSTRUI CAMPO À FRENTE DO PEÃO
-                var obstructionTheFront = (possibility.children[0] != undefined);
-                
-                
-                if( !(i == num_cel && obstructionTheFront) ){
-                    //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
-                    markPossibilityPlay(possibility);
-                }
-                
-                
-                
-                //TESTA PARA SABER SE CÉLULA ANALIZADA É A CÉLULA QUE ESTÁ À FRENTE DA PEÇA SELECIONADA
-                if(i == num_cel){
-                    
-                    //PEGA O NÚMERO DA LINHA ONDE A PEÇA SELECIONADA SE ENCONTRA
-                    //O PRIMEIRO PARENT É PARA SELECIONAR A CÉLULA. O SEGUNDO PARA SELECIONAR A LINHA
-                    var line_peace = ((instance.parentElement).parentElement.getAttribute("id")).split("_")[1];
-                    
-                    //CONDIÇÕES QUE VERIFICAM SE PEÇA PRETA ESTÁ NA LINHA 7 E SE PEÇA BRANCA ESTÁ NA LINHA 2
-                    //DESSA FORMA, É POSSÍVEL SABER SE É PERMITIDO QUE O PEÃO ANDE DUAS CASAS PARA FRENTE
-                    var condicao_black = document.getElementById("vez").value == "black" && line_peace == "7";
-                    var condicao_white = document.getElementById("vez").value == "white" && line_peace == "2";
-                    
-                    if(condicao_white || condicao_black){
-                        if(document.getElementById("vez").value == "white"){
-                            possibility = document.getElementById("row_"+ (+num_line+2) + "-cel_"+i);     
-                        }else if(document.getElementById("vez").value == "black"){
-                            possibility = document.getElementById("row_"+ (+num_line-2) + "-cel_"+i);        
-                        }
-                        
-                        //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
-                        markPossibilityPlay(possibility);
-                    }
-                    
-                }
-                
-            }
-            
-            if( numberPossibilities() == 0 ){
-                closePlay(instance);
-                alert("A peça escolhida não pode ser movida! Escolha outra peça!");
-            }
+            possiblePlaysPawn.call(this, num_cel, num_line, instance_piece);
             
         break;
     }
@@ -325,7 +260,7 @@ function markPossibilityPlay(possibility){
 //RETORNA NÚMERO DE POSSIBILIDADES MARCADAS PARA A JOGADA
 function numberPossibilities(){
     var possibilities = document.querySelectorAll("td[data-possibility='1']");
-    alert( possibilities.length );
+    //alert( possibilities.length );
     return possibilities.length;
 }
 
@@ -350,10 +285,105 @@ function closePlay(selected_piece, playedTaken = false){
         var time_vez;
         if(document.getElementById("vez").value == "white"){
             time_vez = "black";
+            document.getElementById("img_vez").src = "img/if_black_king.png";
         }else{
             time_vez = "white";
+            document.getElementById("img_vez").src = "img/if_white_king.png";
         }
         document.getElementById("vez").value = time_vez;
         
     }
 }
+
+//====================================
+//===========REGRAS DO JOGO===========
+//====================================
+
+//CALCULA POSSIBILIDADES DE JOGADA DE UM PEÃO
+function possiblePlaysPawn(num_cel, num_line, instance_piece){
+    for(i=(num_cel-1);i<(num_cel-1)+3;i++){
+                //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS CUJO MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
+                //DIMINUI NUM_LINE NO TIME BLACK, POIS OS PEÕES DESSE TIME ANDARÃO NO SENTIDO INVERSO DOS PEÕES DO TIME WHITE
+                if(document.getElementById('vez').value == 'white'){
+                    var possibility = document.getElementById("row_"+ (+num_line+1) + "-cel_"+i);
+                }else if(document.getElementById('vez').value == 'black'){
+                    var possibility = document.getElementById("row_"+ (+num_line-1) + "-cel_"+i);
+                }
+                
+                
+                if(possibility == null){
+                    continue;
+                }
+                
+                //TESTA SE 1 E 3 CASAS COM POSIBILIDADES DE JOGADA POSSUEM PEÇAS DO TIME ADVERSÁRIO, POIS PEÃO SÓ PODE IR NA DIAGONAL SE FOR COMER PEÇAS DO ADVERSÁRIO
+                if(i == (num_cel-1) || i == (num_cel-1)+2 ){
+                    if( (possibility.children[0] == undefined) || possibility.children[0].dataset.time == document.getElementById("vez").value ){
+                        continue;
+                    }  
+                }
+                
+                //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
+                //possibility.style.backgroundColor = "yellow";
+                
+                //SERVIRÁ PARA VERIFICAR SE PEÇA ADVERSÁRIA OBSTRUI CAMPO À FRENTE DO PEÃO
+                var obstructionTheFront = (possibility.children[0] != undefined);
+                
+                
+                if( !(i == num_cel && obstructionTheFront) ){
+                    //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
+                    markPossibilityPlay(possibility);
+                }
+                
+                
+                
+                //TESTA PARA SABER SE CÉLULA ANALISADA É A CÉLULA QUE ESTÁ À FRENTE DA PEÇA SELECIONADA
+                if(i == num_cel){
+                    
+                    //PEGA O NÚMERO DA LINHA ONDE A PEÇA SELECIONADA SE ENCONTRA
+                    //O PRIMEIRO PARENT É PARA SELECIONAR A CÉLULA. O SEGUNDO PARA SELECIONAR A LINHA
+                    var line_peace = ((instance_piece.parentElement).parentElement.getAttribute("id")).split("_")[1];
+                    
+                    //CONDIÇÕES QUE VERIFICAM SE PEÇA PRETA ESTÁ NA LINHA 7 E SE PEÇA BRANCA ESTÁ NA LINHA 2
+                    //DESSA FORMA, É POSSÍVEL SABER SE É PERMITIDO QUE O PEÃO ANDE DUAS CASAS PARA FRENTE
+                    var condicao_black = document.getElementById("vez").value == "black" && line_peace == "7";
+                    var condicao_white = document.getElementById("vez").value == "white" && line_peace == "2";
+                    
+                    if(condicao_white || condicao_black){
+                        if(document.getElementById("vez").value == "white"){
+                            possibility = document.getElementById("row_"+ (+num_line+2) + "-cel_"+i);     
+                        }else if(document.getElementById("vez").value == "black"){
+                            possibility = document.getElementById("row_"+ (+num_line-2) + "-cel_"+i);        
+                        }
+                        
+                        //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
+                        markPossibilityPlay(possibility);
+                    }
+                    
+                }
+                
+            }
+            
+            if( numberPossibilities() == 0 ){
+                closePlay(instance_piece);
+                alert("A peça escolhida não pode ser movida! Escolha outra peça!");
+            }
+}
+
+//CALCULA POSSIBILIDADES DE JOGADA DE UM CAVALO
+function possiblePlaysHorse(){}
+
+//CALCULA POSSIBILIDADES DE JOGADA DE UMA TORRE
+function possiblePlaysTower(){}
+
+//CALCULA POSSIBILIDADES DE JOGADA DE UM BISPO
+function possiblePlaysBishop(){}
+
+//CALCULA POSSIBILIDADES DE JOGADA DE UMA RAINHA
+function possiblePlaysQueen(){}
+
+//CALCULA POSSIBILIDADES DE JOGADA DE UM REI
+function possiblePlaysKing(){}
+
+//====================================
+//=========FIM REGRAS DO JOGO=========
+//====================================
