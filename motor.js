@@ -387,23 +387,24 @@ function possiblePlaysTower(num_cel, num_line, instance_piece){
     //FOR RESPONSÁVEL POR FAZER COM QUE FOR ABAIXO ANALISE LINHAS À FRENTE E ATRÁS DA PEÇA
     for(var j=0;j<2;j++){
         var i = 0;
-        var final = 0;
-        //CONDIÇÃO INVERTERÁ TROCARÁ INCREMENTO POR DECREMENTO QUANDO J=1. DESSA FORMA SERÁ POSSÍVEL FAZER A ÁNALISE DAS POSSIBILIDADES TANTO ATRÁS COM NA FRENTE DA PEÇA SELECIONADA PELO GAMER :)
-        var condicao = () => { (j==0? i++ : i--) };
+        //INCREDECRE TROCARÁ INCREMENTO POR DECREMENTO QUANDO J=1. DESSA FORMA SERÁ POSSÍVEL FAZER A ÁNALISE DAS POSSIBILIDADES TANTO ATRÁS COM NA FRENTE DA PEÇA SELECIONADA PELO GAMER :)
+        var increDecre = () => { (j==0? i++ : i--) };
         
         if(j == 0){
             i = numLine+1;
-            final = 8;
             alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
         }else{
             i = numLine-1;
-            final = 1;
             alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
         }
         alert("Antes do for, j vale " + j);
         
+        //RETORNA CONDIÇÃO PARA QUE FOR CONTINUE RODANDO. SE CHAMA FINAL POIS CONTROLA O NÚMERO FINAL QUE O FOR PODERÁ EXECUTAR!
+        //ALÉM DE TROCAR VALOR FINAL DO FOR, ELE MUDA A CONDIÇÃO DE <= PARA >=. JUNTAMENTE COM INCREDECRE, PERMITIRÁ QUE O FOR SEJA INVERTIDO E PERCORRA AS CASAS ATRÁS DA PEÇA
+        var final = (incre) => {return (j==0)? incre<=8 : incre>=1};
+        
         //FOR QUE PERCORRERÁ CASAS À FRENTE E ATRÁS DA PEÇA
-        for(i; i<=final; condicao()){
+        for(i; final(i); increDecre()){
             
             //TRATA CASO i SEJA IGUAL A ZERO(i==0 SIGNIFICA QUE PEÇA ESTÁ NO CANTO DO TABULEIRO E NÃO HÁ COMO ANDAR PARA TRÁS)
             if(i==0){
