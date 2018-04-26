@@ -179,6 +179,11 @@ function showAvailablePlays(instance_piece, piece){
             possiblePlaysPawn.call(this, num_cel, num_line, instance_piece);
             
         break;
+            
+        case "torre":
+            possiblePlaysTower.call(this, num_cel, num_line, instance_piece);
+            
+        break;
     }
 }
 
@@ -302,78 +307,129 @@ function closePlay(selected_piece, playedTaken = false){
 //CALCULA POSSIBILIDADES DE JOGADA DE UM PEÃO
 function possiblePlaysPawn(num_cel, num_line, instance_piece){
     for(i=(num_cel-1);i<(num_cel-1)+3;i++){
-                //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS CUJO MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
-                //DIMINUI NUM_LINE NO TIME BLACK, POIS OS PEÕES DESSE TIME ANDARÃO NO SENTIDO INVERSO DOS PEÕES DO TIME WHITE
-                if(document.getElementById('vez').value == 'white'){
-                    var possibility = document.getElementById("row_"+ (+num_line+1) + "-cel_"+i);
-                }else if(document.getElementById('vez').value == 'black'){
-                    var possibility = document.getElementById("row_"+ (+num_line-1) + "-cel_"+i);
+        //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS CUJO MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
+        //DIMINUI NUM_LINE NO TIME BLACK, POIS OS PEÕES DESSE TIME ANDARÃO NO SENTIDO INVERSO DOS PEÕES DO TIME WHITE
+        if(document.getElementById('vez').value == 'white'){
+            var possibility = document.getElementById("row_"+ (+num_line+1) + "-cel_"+i);
+        }else if(document.getElementById('vez').value == 'black'){
+            var possibility = document.getElementById("row_"+ (+num_line-1) + "-cel_"+i);
+        }
+
+
+        if(possibility == null){
+            continue;
+        }
+
+        //TESTA SE 1 E 3 CASAS COM POSIBILIDADES DE JOGADA POSSUEM PEÇAS DO TIME ADVERSÁRIO, POIS PEÃO SÓ PODE IR NA DIAGONAL SE FOR COMER PEÇAS DO ADVERSÁRIO
+        if(i == (num_cel-1) || i == (num_cel-1)+2 ){
+            if( (possibility.children[0] == undefined) || possibility.children[0].dataset.time == document.getElementById("vez").value ){
+                continue;
+            }  
+        }
+
+        //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
+        //possibility.style.backgroundColor = "yellow";
+
+        //SERVIRÁ PARA VERIFICAR SE PEÇA ADVERSÁRIA OBSTRUI CAMPO À FRENTE DO PEÃO
+        var obstructionTheFront = (possibility.children[0] != undefined);
+
+
+        if( !(i == num_cel && obstructionTheFront) ){
+            //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
+            markPossibilityPlay(possibility);
+        }
+
+
+
+        //TESTA PARA SABER SE CÉLULA ANALISADA É A CÉLULA QUE ESTÁ À FRENTE DA PEÇA SELECIONADA
+        if(i == num_cel){
+
+            //PEGA O NÚMERO DA LINHA ONDE A PEÇA SELECIONADA SE ENCONTRA
+            //O PRIMEIRO PARENT É PARA SELECIONAR A CÉLULA. O SEGUNDO PARA SELECIONAR A LINHA
+            var line_peace = ((instance_piece.parentElement).parentElement.getAttribute("id")).split("_")[1];
+
+            //CONDIÇÕES QUE VERIFICAM SE PEÇA PRETA ESTÁ NA LINHA 7 E SE PEÇA BRANCA ESTÁ NA LINHA 2
+            //DESSA FORMA, É POSSÍVEL SABER SE É PERMITIDO QUE O PEÃO ANDE DUAS CASAS PARA FRENTE
+            var condicao_black = document.getElementById("vez").value == "black" && line_peace == "7";
+            var condicao_white = document.getElementById("vez").value == "white" && line_peace == "2";
+
+            if(condicao_white || condicao_black){
+                if(document.getElementById("vez").value == "white"){
+                    possibility = document.getElementById("row_"+ (+num_line+2) + "-cel_"+i);     
+                }else if(document.getElementById("vez").value == "black"){
+                    possibility = document.getElementById("row_"+ (+num_line-2) + "-cel_"+i);        
                 }
-                
-                
-                if(possibility == null){
-                    continue;
-                }
-                
-                //TESTA SE 1 E 3 CASAS COM POSIBILIDADES DE JOGADA POSSUEM PEÇAS DO TIME ADVERSÁRIO, POIS PEÃO SÓ PODE IR NA DIAGONAL SE FOR COMER PEÇAS DO ADVERSÁRIO
-                if(i == (num_cel-1) || i == (num_cel-1)+2 ){
-                    if( (possibility.children[0] == undefined) || possibility.children[0].dataset.time == document.getElementById("vez").value ){
-                        continue;
-                    }  
-                }
-                
-                //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
-                //possibility.style.backgroundColor = "yellow";
-                
-                //SERVIRÁ PARA VERIFICAR SE PEÇA ADVERSÁRIA OBSTRUI CAMPO À FRENTE DO PEÃO
-                var obstructionTheFront = (possibility.children[0] != undefined);
-                
-                
-                if( !(i == num_cel && obstructionTheFront) ){
-                    //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
-                    markPossibilityPlay(possibility);
-                }
-                
-                
-                
-                //TESTA PARA SABER SE CÉLULA ANALISADA É A CÉLULA QUE ESTÁ À FRENTE DA PEÇA SELECIONADA
-                if(i == num_cel){
-                    
-                    //PEGA O NÚMERO DA LINHA ONDE A PEÇA SELECIONADA SE ENCONTRA
-                    //O PRIMEIRO PARENT É PARA SELECIONAR A CÉLULA. O SEGUNDO PARA SELECIONAR A LINHA
-                    var line_peace = ((instance_piece.parentElement).parentElement.getAttribute("id")).split("_")[1];
-                    
-                    //CONDIÇÕES QUE VERIFICAM SE PEÇA PRETA ESTÁ NA LINHA 7 E SE PEÇA BRANCA ESTÁ NA LINHA 2
-                    //DESSA FORMA, É POSSÍVEL SABER SE É PERMITIDO QUE O PEÃO ANDE DUAS CASAS PARA FRENTE
-                    var condicao_black = document.getElementById("vez").value == "black" && line_peace == "7";
-                    var condicao_white = document.getElementById("vez").value == "white" && line_peace == "2";
-                    
-                    if(condicao_white || condicao_black){
-                        if(document.getElementById("vez").value == "white"){
-                            possibility = document.getElementById("row_"+ (+num_line+2) + "-cel_"+i);     
-                        }else if(document.getElementById("vez").value == "black"){
-                            possibility = document.getElementById("row_"+ (+num_line-2) + "-cel_"+i);        
-                        }
-                        
-                        //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
-                        markPossibilityPlay(possibility);
-                    }
-                    
-                }
-                
+
+                //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
+                markPossibilityPlay(possibility);
             }
-            
-            if( numberPossibilities() == 0 ){
-                closePlay(instance_piece);
-                alert("A peça escolhida não pode ser movida! Escolha outra peça!");
-            }
+
+        }
+
+    }
+
+    if( numberPossibilities() == 0 ){
+        closePlay(instance_piece);
+        alert("A peça escolhida não pode ser movida! Escolha outra peça!");
+    }
 }
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM CAVALO
 function possiblePlaysHorse(){}
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UMA TORRE
-function possiblePlaysTower(){}
+function possiblePlaysTower(num_cel, num_line, instance_piece){
+    alert("entrando no metodo");
+    //CORDENADAS DAS PEÇAS NO TABUIRO
+    var numLine = numLinePiece(instance_piece);
+    var numCel = numCelPiece(instance_piece);
+    
+    //FOR RESPONSÁVEL POR FAZER COM QUE FOR ABAIXO ANALISE LINHAS À FRENTE E ATRÁS DA PEÇA
+    for(var j=0;j<2;j++){
+        var i = 0;
+        var final = 0;
+        //CONDIÇÃO INVERTERÁ TROCARÁ INCREMENTO POR DECREMENTO QUANDO J=1. DESSA FORMA SERÁ POSSÍVEL FAZER A ÁNALISE DAS POSSIBILIDADES TANTO ATRÁS COM NA FRENTE DA PEÇA SELECIONADA PELO GAMER :)
+        var condicao = () => { (j==0? i++ : i--) };
+        
+        if(j == 0){
+            i = numLine+1;
+            final = 8;
+            alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+        }else{
+            i = numLine-1;
+            final = 1;
+            alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+        }
+        alert("Antes do for, j vale " + j);
+        
+        //FOR QUE PERCORRERÁ CASAS À FRENTE E ATRÁS DA PEÇA
+        for(i; i<=final; condicao()){
+            
+            //TRATA CASO i SEJA IGUAL A ZERO(i==0 SIGNIFICA QUE PEÇA ESTÁ NO CANTO DO TABULEIRO E NÃO HÁ COMO ANDAR PARA TRÁS)
+            if(i==0){
+               break;
+            }
+            
+            alert("Esse é o j: " + j + ".Estamos no for :)");
+            //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS À FRENTE DA PEÇA ONDE MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
+            var id = "row_"+ i + "-cel_"+numCel;
+            alert(id);
+            var possibility = document.getElementById(id);
+
+            //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
+            if(possibility.children[0] != undefined){
+                break;
+
+            }else{
+                possibility.style.backgroundColor = "aqua";
+
+            }
+
+        }    
+    }
+    
+        
+}
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM BISPO
 function possiblePlaysBishop(){}
@@ -387,3 +443,13 @@ function possiblePlaysKing(){}
 //====================================
 //=========FIM REGRAS DO JOGO=========
 //====================================
+
+//RETORNA NÚMERO DA LINHA ONDE A PEÇA SE ENCONTRA
+function numLinePiece(instance_piece){
+    return +(instance_piece.parentElement.id).split("-")[0].split("_")[1]; 
+}
+
+//RETORNA NÚMERO DA CÉLULA ONDE A PEÇA SE ENCONTRA
+function numCelPiece(instance_piece){
+    return +(instance_piece.parentElement.id).split("-")[1].split("_")[1];
+}
