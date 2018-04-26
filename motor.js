@@ -159,29 +159,29 @@ function choosePiece(){
 
 //RESPONSÁVEL POR ANÁLISAR JOGADAS DISPONÍVEIS
 function showAvailablePlays(instance_piece, piece){
-    var id_piece, id_row, id_cel;
+    //var id_piece, id_row, id_cel;
     var num_line, num_cel;
     //PEGANDO ID DA CASA ONDE ESTÁ A PEÇA
-    id_piece = instance_piece.parentElement.id;
+    //id_piece = instance_piece.parentElement.id;
     //USANDO ID PARA PEGAR COORDENADAS DA PEÇA NO TABULEIRO
-    var arr = id_piece.split("-");
-    id_row = arr[0];
-    id_cel = arr[1];
+    //var arr = id_piece.split("-");
+    //id_row = arr[0];
+    //id_cel = arr[1];
     //PEGANDO NÚMERO DA LINHA ONDE A PEÇA ESCOLHIDA SE ENCONTRA
-    num_line = id_row.split("_")[1];
+    //num_line = id_row.split("_")[1];
     //PEGANDO NÚMERO DA CÉLULA ONDE A PEÇA ESCOLHIDA SE ENCONTRA
-    num_cel = id_cel.split("_")[1];
+    //num_cel = id_cel.split("_")[1];
     
     //SWITCH RESPONSÁVEL POR VERIFICAR O TIPO DE PEÇA ESCOLHIDA E QUAIS SÃO OS MOVIMENTOS POSSÍVEIS PARA ELA
     //IRÁ MARCAR AS CASAS CUJA PEÇA PODE IR
     switch(piece){
         case "peao":
-            possiblePlaysPawn.call(this, num_cel, num_line, instance_piece);
+            possiblePlaysPawn.call(this, instance_piece);
             
         break;
             
         case "torre":
-            possiblePlaysTower.call(this, num_cel, num_line, instance_piece);
+            possiblePlaysTower.call(this, instance_piece);
             
         break;
     }
@@ -305,14 +305,18 @@ function closePlay(selected_piece, playedTaken = false){
 //====================================
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM PEÃO
-function possiblePlaysPawn(num_cel, num_line, instance_piece){
-    for(i=(num_cel-1);i<(num_cel-1)+3;i++){
+function possiblePlaysPawn(instance_piece){
+    //CORDENADAS DAS PEÇAS NO TABUIRO
+    var numLine = numLinePiece(instance_piece);
+    var numCel = numCelPiece(instance_piece);
+    
+    for(i=(numCel-1);i<(numCel-1)+3;i++){
         //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS CUJO MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
         //DIMINUI NUM_LINE NO TIME BLACK, POIS OS PEÕES DESSE TIME ANDARÃO NO SENTIDO INVERSO DOS PEÕES DO TIME WHITE
         if(document.getElementById('vez').value == 'white'){
-            var possibility = document.getElementById("row_"+ (+num_line+1) + "-cel_"+i);
+            var possibility = document.getElementById("row_"+ (+numLine+1) + "-cel_"+i);
         }else if(document.getElementById('vez').value == 'black'){
-            var possibility = document.getElementById("row_"+ (+num_line-1) + "-cel_"+i);
+            var possibility = document.getElementById("row_"+ (+numLine-1) + "-cel_"+i);
         }
 
 
@@ -321,7 +325,7 @@ function possiblePlaysPawn(num_cel, num_line, instance_piece){
         }
 
         //TESTA SE 1 E 3 CASAS COM POSIBILIDADES DE JOGADA POSSUEM PEÇAS DO TIME ADVERSÁRIO, POIS PEÃO SÓ PODE IR NA DIAGONAL SE FOR COMER PEÇAS DO ADVERSÁRIO
-        if(i == (num_cel-1) || i == (num_cel-1)+2 ){
+        if(i == (numCel-1) || i == (numCel-1)+2 ){
             if( (possibility.children[0] == undefined) || possibility.children[0].dataset.time == document.getElementById("vez").value ){
                 continue;
             }  
@@ -334,7 +338,7 @@ function possiblePlaysPawn(num_cel, num_line, instance_piece){
         var obstructionTheFront = (possibility.children[0] != undefined);
 
 
-        if( !(i == num_cel && obstructionTheFront) ){
+        if( !(i == numCel && obstructionTheFront) ){
             //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
             markPossibilityPlay(possibility);
         }
@@ -342,22 +346,22 @@ function possiblePlaysPawn(num_cel, num_line, instance_piece){
 
 
         //TESTA PARA SABER SE CÉLULA ANALISADA É A CÉLULA QUE ESTÁ À FRENTE DA PEÇA SELECIONADA
-        if(i == num_cel){
+        if(i == numCel){
 
             //PEGA O NÚMERO DA LINHA ONDE A PEÇA SELECIONADA SE ENCONTRA
             //O PRIMEIRO PARENT É PARA SELECIONAR A CÉLULA. O SEGUNDO PARA SELECIONAR A LINHA
-            var line_peace = ((instance_piece.parentElement).parentElement.getAttribute("id")).split("_")[1];
+            //var line_peace = ((instance_piece.parentElement).parentElement.getAttribute("id")).split("_")[1];
 
             //CONDIÇÕES QUE VERIFICAM SE PEÇA PRETA ESTÁ NA LINHA 7 E SE PEÇA BRANCA ESTÁ NA LINHA 2
             //DESSA FORMA, É POSSÍVEL SABER SE É PERMITIDO QUE O PEÃO ANDE DUAS CASAS PARA FRENTE
-            var condicao_black = document.getElementById("vez").value == "black" && line_peace == "7";
-            var condicao_white = document.getElementById("vez").value == "white" && line_peace == "2";
+            var condicao_black = document.getElementById("vez").value == "black" && numLine == "7";
+            var condicao_white = document.getElementById("vez").value == "white" && numLine == "2";
 
             if(condicao_white || condicao_black){
                 if(document.getElementById("vez").value == "white"){
-                    possibility = document.getElementById("row_"+ (+num_line+2) + "-cel_"+i);     
+                    possibility = document.getElementById("row_"+ (+numLine+2) + "-cel_"+i);     
                 }else if(document.getElementById("vez").value == "black"){
-                    possibility = document.getElementById("row_"+ (+num_line-2) + "-cel_"+i);        
+                    possibility = document.getElementById("row_"+ (+numLine-2) + "-cel_"+i);        
                 }
 
                 //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
@@ -378,56 +382,71 @@ function possiblePlaysPawn(num_cel, num_line, instance_piece){
 function possiblePlaysHorse(){}
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UMA TORRE
-function possiblePlaysTower(num_cel, num_line, instance_piece){
+function possiblePlaysTower(instance_piece){
     alert("entrando no metodo");
     //CORDENADAS DAS PEÇAS NO TABUIRO
     var numLine = numLinePiece(instance_piece);
     var numCel = numCelPiece(instance_piece);
     
-    //FOR RESPONSÁVEL POR FAZER COM QUE FOR ABAIXO ANALISE LINHAS À FRENTE E ATRÁS DA PEÇA
-    for(var j=0;j<2;j++){
-        var i = 0;
-        //INCREDECRE TROCARÁ INCREMENTO POR DECREMENTO QUANDO J=1. DESSA FORMA SERÁ POSSÍVEL FAZER A ÁNALISE DAS POSSIBILIDADES TANTO ATRÁS COM NA FRENTE DA PEÇA SELECIONADA PELO GAMER :)
-        var increDecre = () => { (j==0? i++ : i--) };
-        
-        if(j == 0){
-            i = numLine+1;
-            alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
-        }else{
-            i = numLine-1;
-            alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
-        }
-        alert("Antes do for, j vale " + j);
-        
-        //RETORNA CONDIÇÃO PARA QUE FOR CONTINUE RODANDO. SE CHAMA FINAL POIS CONTROLA O NÚMERO FINAL QUE O FOR PODERÁ EXECUTAR!
-        //ALÉM DE TROCAR VALOR FINAL DO FOR, ELE MUDA A CONDIÇÃO DE <= PARA >=. JUNTAMENTE COM INCREDECRE, PERMITIRÁ QUE O FOR SEJA INVERTIDO E PERCORRA AS CASAS ATRÁS DA PEÇA
-        var final = (incre) => {return (j==0)? incre<=8 : incre>=1};
-        
-        //FOR QUE PERCORRERÁ CASAS À FRENTE E ATRÁS DA PEÇA
-        for(i; final(i); increDecre()){
-            
-            //TRATA CASO i SEJA IGUAL A ZERO(i==0 SIGNIFICA QUE PEÇA ESTÁ NO CANTO DO TABULEIRO E NÃO HÁ COMO ANDAR PARA TRÁS)
-            if(i==0){
-               break;
-            }
-            
-            alert("Esse é o j: " + j + ".Estamos no for :)");
-            //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS À FRENTE DA PEÇA ONDE MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
-            var id = "row_"+ i + "-cel_"+numCel;
-            alert(id);
-            var possibility = document.getElementById(id);
+    //EXISTEM 4 FILEIRAS: AS QUE FICAM DO LADO DA PEÇA ESCOLHIDA E AS QUE FICAM À FRENTE E ATRÁS DA PEÇA ESCOLHIDA
+    //NA REPRESENTAÇÃO ABAIXO, X É A PEÇA E AS FILEIRAS SÃO OS F's. PENSE NA FILEIRA À ESQUERDA DA PEÇA: CHAMAREMOS A FILEIRA DIREITA DE CONTRAFILEIRA. O MESMO CONCEITO VALERÁ PARA AS FILEIRAS ACIMA E ABAIXO DA PEÇA. GUARDE ESSES CONCEITOS PARA ENTENDER OS COMENTÁRIOS ABAIXO :)
+    
+    // Q Q Q Q F Q Q Q Q
+    // Q Q Q Q F Q Q Q Q
+    // Q Q Q Q F Q Q Q Q
+    // Q Q Q Q F Q Q Q Q
+    // F F F F X F F F F 
+    // Q Q Q Q F Q Q Q Q
+    // Q Q Q Q F Q Q Q Q
+    // Q Q Q Q F Q Q Q Q 
+    
+    //FOR QUE FARÁ COM QUE ESTRUTURA ABAIXO PERCORRA QUATRO FILEIRAS
+    //for(var k=0;k<2;k++){
+        //FOR RESPONSÁVEL POR FAZER COM QUE FOR ABAIXO PERCORRA DUAS FILEIRAS
+        for(var j=0;j<2;j++){
+            var i = 0;
+            //INCREDECRE TROCARÁ INCREMENTO POR DECREMENTO QUANDO J=1. DESSA FORMA SERÁ POSSÍVEL FAZER A ÁNALISE DAS POSSIBILIDADES TANTO EM UMA FILEIRA COMO NA "CONTRAFILEIRA"
+            var increDecre = () => { (j==0? i++ : i--) };
 
-            //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
-            if(possibility.children[0] != undefined){
-                break;
-
+            if(j == 0){
+                i = numLine+1;
+                alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
             }else{
-                possibility.style.backgroundColor = "aqua";
-
+                i = numLine-1;
+                alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
             }
+            alert("Antes do for, j vale " + j);
 
-        }    
-    }
+            //RETORNA CONDIÇÃO PARA QUE FOR CONTINUE RODANDO. SE CHAMA FINAL POIS CONTROLA O NÚMERO FINAL QUE O FOR PODERÁ EXECUTAR!
+            //ALÉM DE TROCAR VALOR FINAL DO FOR, ELE MUDA A CONDIÇÃO DE <= PARA >=. JUNTAMENTE COM INCREDECRE, PERMITIRÁ QUE O FOR SEJA INVERTIDO E PERCORRA A "CONTRAFILEIRA" NO SEGUNDO LOOP DO FOR ACIMA
+            var final = (incre) => {return (j==0)? incre<=8 : incre>=1};
+
+            //FOR QUE PERCORRERÁ UMA FILEIRA
+            for(i; final(i); increDecre()){
+
+                //TRATA CASO i SEJA IGUAL A ZERO(i==0 SIGNIFICA QUE PEÇA ESTÁ NO CANTO DO TABULEIRO E NÃO HÁ COMO ANDAR PARA TRÁS)
+                if(i==0){
+                   break;
+                }
+
+                alert("Esse é o j: " + j + ".Estamos no for :)");
+                //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS À FRENTE DA PEÇA ONDE MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
+                var id = "row_"+ i + "-cel_"+numCel;
+                alert(id);
+                var possibility = document.getElementById(id);
+
+                //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
+                if(possibility.children[0] != undefined){
+                    break;
+
+                }else{
+                    possibility.style.backgroundColor = "aqua";
+
+                }
+
+            }    
+        }
+    //}
     
         
 }
