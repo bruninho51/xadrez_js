@@ -141,6 +141,7 @@ function choosePiece(){
 
                 var piece = img_piece.dataset.piece; //NOME DA PEÇA
                 //MOSTRA CAMPOS QUE A PEÇA PODE IR
+                
                 showAvailablePlays(img_piece, piece);
 
             }else{
@@ -174,6 +175,7 @@ function showAvailablePlays(instance_piece, piece){
     
     //SWITCH RESPONSÁVEL POR VERIFICAR O TIPO DE PEÇA ESCOLHIDA E QUAIS SÃO OS MOVIMENTOS POSSÍVEIS PARA ELA
     //IRÁ MARCAR AS CASAS CUJA PEÇA PODE IR
+    
     switch(piece){
         case "peao":
             possiblePlaysPawn.call(this, instance_piece);
@@ -184,7 +186,14 @@ function showAvailablePlays(instance_piece, piece){
             possiblePlaysTower.call(this, instance_piece);
             
         break;
+            
+        case "cavalo":
+            possiblePlaysHorse.call(this, instance_piece);
+            
+        break;
+            
     }
+    
 }
 
 //FUNÇÃO RESPONSÁVEL POR FAZER A JOGADA
@@ -379,7 +388,86 @@ function possiblePlaysPawn(instance_piece){
 }
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM CAVALO
-function possiblePlaysHorse(){}
+function possiblePlaysHorse(instance_piece){
+    var numLine = numLinePiece(instance_piece);
+    var numCel = numCelPiece(instance_piece);
+    alert("entrando");
+    
+    
+    
+    for(i=1; i<=4;i++){ //FOR RESPONSÁVEL POR PERCORRER AS DUAS LINHAS ACIMA E ABAIXO DA PEÇA ESCOLHIDA
+        
+        if(i == 1 || i == 2){
+           var line = numLine - i; //LINHA ACIMA DA PEÇA
+           //PEGA AS DUAS POSSIBILIDADES DA LINHA
+            
+            if(i==1){
+                var possibilities = [];
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel-2))); 
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel+2)));    
+            }else if(i==2){
+                var possibilities = [];
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel-1))); 
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel+1)));    
+            }
+           
+        
+            
+           //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
+            for(k=0; k<possibilities.length;k++){
+                
+                if(possibilities[k] != null){
+                    if(possibilities[k].children[0] != undefined){
+
+                    }else{
+                        possibilities[k].style.backgroundColor = "aqua";
+
+                    }    
+                }
+                
+                    
+            
+            
+            }
+            
+            
+        }else if(i == 3 || i == 4){
+            var line = numLine+(i-2); //LINHA ABAIXO DA PEÇA
+           //PEGA AS DUAS POSSIBILIDADES DA LINHA
+           if(i==3){
+                var possibilities = [];
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel-2))); 
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel+2)));    
+            }else if(i==4){
+                var possibilities = [];
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel-1))); 
+                possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel+1)));    
+            }
+        
+            
+           //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
+            for(k=0;k<possibilities.length;k++){
+                
+                if(possibilities[k] != null){
+                    if(possibilities[k].children[0] != undefined){
+
+                    }else{
+                        possibilities[k].style.backgroundColor = "aqua";
+
+                    }    
+                }
+                    
+            }
+            
+            
+        }
+            
+        
+        
+        
+    }
+    
+}
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UMA TORRE
 function possiblePlaysTower(instance_piece){
