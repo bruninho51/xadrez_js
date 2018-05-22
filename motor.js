@@ -401,20 +401,37 @@ function possiblePlaysTower(instance_piece){
     // Q Q Q Q F Q Q Q Q 
     
     //FOR QUE FARÁ COM QUE ESTRUTURA ABAIXO PERCORRA QUATRO FILEIRAS
-    //for(var k=0;k<2;k++){
+    for(var k=0;k<2;k++){
         //FOR RESPONSÁVEL POR FAZER COM QUE FOR ABAIXO PERCORRA DUAS FILEIRAS
         for(var j=0;j<2;j++){
             var i = 0;
             //INCREDECRE TROCARÁ INCREMENTO POR DECREMENTO QUANDO J=1. DESSA FORMA SERÁ POSSÍVEL FAZER A ÁNALISE DAS POSSIBILIDADES TANTO EM UMA FILEIRA COMO NA "CONTRAFILEIRA"
             var increDecre = () => { (j==0? i++ : i--) };
 
-            if(j == 0){
-                i = numLine+1;
-                alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+            //IF RESPONSÁVEL POR TROCAR numCel POR numLine, NO SEGUNDO LOOP DO PRIMEIRO FOR, PARA QUE ESTRUTURA PERCORRA COM BASE NAS LINHAS, E NÃO MAIS COM BASE NAS COLUNAS.
+            if(k==1){
+                
+                if(j == 0){
+                    i = numLine+1;
+                    alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+                }else{
+                    i = numLine-1;
+                    alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+                }
+                
             }else{
-                i = numLine-1;
-                alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+            
+                if(j == 0){
+                    i = numCel+1;
+                    alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+                }else{
+                    i = numCel-1;
+                    alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+                }
+                
             }
+            
+            
             alert("Antes do for, j vale " + j);
 
             //RETORNA CONDIÇÃO PARA QUE FOR CONTINUE RODANDO. SE CHAMA FINAL POIS CONTROLA O NÚMERO FINAL QUE O FOR PODERÁ EXECUTAR!
@@ -430,9 +447,20 @@ function possiblePlaysTower(instance_piece){
                 }
 
                 alert("Esse é o j: " + j + ".Estamos no for :)");
-                //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS À FRENTE DA PEÇA ONDE MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
-                var id = "row_"+ i + "-cel_"+numCel;
+                
+                
+                //SE K == 1, NÚMERO DA CÉLULA SERÁ A MESMA E NÚMERO DE LINHA MUDARÁ(FOR PERCORRERÁ AS LINHAS À PROCURA DE POSSIBILIDADES DE JOGADA)
+                if(k==1){
+                        var id = "row_"+ i + "-cel_"+numCel;
+                    
+                    //SE K != 1, NÚMERO DA LINHA SERÁ A MESMA E NÚMERO DA CÉLULA MUDARÁ(FOR PERCORRERÁ AS CÉLULAS AO LADO DA PEÇA A PROCURA DE POSSIBILIDADES DE JOGADA)
+                   }else{ 
+                       var id = "row_"+ numLine + "-cel_"+i;
+                   }
+                   
+                
                 alert(id);
+                //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS À FRENTE DA PEÇA ONDE MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
                 var possibility = document.getElementById(id);
 
                 //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
@@ -446,7 +474,7 @@ function possiblePlaysTower(instance_piece){
 
             }    
         }
-    //}
+    }
     
         
 }
