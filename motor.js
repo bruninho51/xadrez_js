@@ -192,6 +192,11 @@ function showAvailablePlays(instance_piece, piece){
             
         break;
             
+        case "bispo":
+            possiblePlaysBishop.call(this, instance_piece);
+            
+        break;
+            
     }
     
 }
@@ -389,11 +394,9 @@ function possiblePlaysPawn(instance_piece){
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM CAVALO
 function possiblePlaysHorse(instance_piece){
+    //PEGANDO AS COORDENADAS DA PEÇA ESCOLHIDA
     var numLine = numLinePiece(instance_piece);
     var numCel = numCelPiece(instance_piece);
-    alert("entrando");
-    
-    
     
     for(i=1; i<=4;i++){ //FOR RESPONSÁVEL POR PERCORRER AS DUAS LINHAS ACIMA E ABAIXO DA PEÇA ESCOLHIDA
         
@@ -411,7 +414,6 @@ function possiblePlaysHorse(instance_piece){
                 possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel+1)));    
             }
            
-        
             
            //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
             for(k=0; k<possibilities.length;k++){
@@ -424,9 +426,6 @@ function possiblePlaysHorse(instance_piece){
 
                     }    
                 }
-                
-                    
-            
             
             }
             
@@ -459,11 +458,7 @@ function possiblePlaysHorse(instance_piece){
                     
             }
             
-            
         }
-            
-        
-        
         
     }
     
@@ -471,6 +466,11 @@ function possiblePlaysHorse(instance_piece){
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UMA TORRE
 function possiblePlaysTower(instance_piece){
+    
+    //----------------------------------//
+    //------REFATORAÇÃO BEM VINDA :)----//
+    //----------------------------------//
+    
     alert("entrando no metodo");
     //CORDENADAS DAS PEÇAS NO TABUIRO
     var numLine = numLinePiece(instance_piece);
@@ -568,7 +568,80 @@ function possiblePlaysTower(instance_piece){
 }
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM BISPO
-function possiblePlaysBishop(){}
+function possiblePlaysBishop(instance_piece){
+    //CORDENADAS DAS PEÇAS NO TABUIRO.
+    var numLine = numLinePiece(instance_piece);
+    var numCel = numCelPiece(instance_piece);
+    
+    //VARIÁVEIS QUE SERÃO USADAS PARA CONTROLE DAS COORDENADAS DAS CÉLULAS QUE SERÃO MARCADAS NA PARTE DIREITA E ESQUERDA DA PEÇA.
+    var celEsq = numCel;
+    var celDir = numCel;
+    
+    //VARIÁVEIS QUE SERÃO USADAS PARA O CONTROLE DAS COORDENADAS DAS LINHAS QUE SERÃO ANALIZADAS AO NORTE E AO SUL DA PEÇA.
+    var lineNorth = numLine;
+    var lineSouth = numLine;
+    
+    //VARIÁVEL QUE INFORMA SE EXISTEM POSSIBILIDADES.
+    var therePossibilities = true;
+    //VARIÁVEL QUE INFORMARÁ QUANTAS CASAS SEGUINDAS FORAM DADAS COMO INEXISTENTES.
+    var erro = 0;
+    
+    //DO...WHILE PERCORRERÁ DIAGONAIS À PROCURA DE POSSIBILIDADES DE JOGADA.
+    do{
+            
+        //FOR QUE PERCORRE DUAS VEZES PARA QUE DUAS LINHAS SEJAM ANALISADAS. UMA LINHA AO NORTE DA PEÇA, E A OUTRA A LINHA ESPELHADA, AO SUL.
+        for(j=0;j<2;j++){
+            //CONTROLA SE A LINHA ANALISADA SERÁ A QUE SE ENCONTRA AO NORTE OU A SUA LINHA ESPELHO, AO SUL DA PEÇA.
+            if(j==0){
+                var line = --lineNorth;
+            }else if(j==1){
+                var line = ++lineSouth;
+            }
+
+            //FOR QUE PERCORRE DUAS VEZES PARA QUE DUAS CÉLULAS DE UMA LINHA SEJAM MARCADAS. UMA CÉLULA À ESQUERDA DA PEÇA, E A CÉLULA ESPELO À DIREITA DA PEÇA.
+            for(i=0;i<2;i++){
+
+                //CONTROLA SE A CÉLULA ANALISADA NA LINHA SERÁ A QUE SE ENCONTRA À ESQUERDA OU À DIREITA DA PEÇA.
+                //TERNÁRIO QUE IMPEDE PRÉ-DECREMENTO OU PRÉ-INCREMENTO DAS CÉLULAS, VISTO QUE AS COORDENADAS DAS CÉLULAS QUE SERÃO MARCADAS SÃO AS MESMAS TANTO PARA A LINHA NORTE, QUANDO PARA A LINHA ESPELHO NO SUL.
+                if(i==0){
+                    var cel = (j==0) ? --celEsq : celEsq;
+
+                }else if(i==1){
+                    var cel = (j==0) ? ++celDir : celDir;
+
+                }    
+
+                //DEFINE O ID DO CAMPO ONDE A JOGADA É TEORICAMENTE POSSÍVEL, RESGATA A CASA E JOGA NA VARIÁVEL POSSIBILITY.
+                var id = "row_"+ line + "-cel_"+ cel;
+                var possibility = document.getElementById(id);   
+
+                //SÓ FAZ A CHECAGEM DE PEÇA SE A POSIÇÃO EXISTIR. SE NÃO EXISTIR, VARIÁVEL ERRO É PRÉ-INCREMENTADA.
+                if(possibility != undefined){
+                    //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER. CASO EXISTA, VARIÁVEL ERRO É INCREMENTADA E CASA NÃO É MARCADA COMO POSSIBILIDADE DE JOGADA, VISTO QUE OUTRA PEÇA JÁ SE ENCONTRA LÁ.
+                    if(possibility.children[0] != undefined){
+                        ++erro;
+
+                    }else{
+                        possibility.style.backgroundColor = "aqua";
+
+                    }    
+                }else{
+                    ++erro;
+                }    
+
+            }    
+        }
+        
+        //SE AS 4 CASAS ANALISADAS PELA ESTRUTURA DEREM ERRO, SIGNIFICA QUE NÃO HÁ MAIS POSSIBILIDADES DE JOGADA, POIS AS 4 DIAGONAIS ESTÃO OBSTRUÍDAS. CASO CONTRÁRIO, ERRO RECEBE 0, E A ESTRUTURA É EXECUTADA NOVAMENTE ATÉ ERRO SER IGUAL A 4.
+        if(erro == 4){
+            therePossibilities = false;
+        }else{
+            erro = 0;
+        }
+            
+    }while(therePossibilities);
+    
+}
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UMA RAINHA
 function possiblePlaysQueen(){}
