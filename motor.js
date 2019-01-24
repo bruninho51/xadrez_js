@@ -709,8 +709,26 @@ function possiblePlaysQueen(instance_piece){
 }
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM REI
-function possiblePlaysKing(instance_piece){
-    possiblePlaysPawn(instance_piece, false);
+function possiblePlaysKing(instance_piece, moveTwo = false){
+    //CORDENADAS DAS PEÇAS NO TABUIRO
+    var numLine = numLinePiece(instance_piece);
+    var numCel = numCelPiece(instance_piece);
+    
+    for(i=(numCel-1);i<(numCel-1)+3;i++){
+        var possibilitiesLines = new Array();
+        possibilitiesLines.push(document.getElementById("row_"+ (+numLine-1) + "-cel_"+i));
+        possibilitiesLines.push(document.getElementById("row_"+ (+numLine) + "-cel_"+i));
+        possibilitiesLines.push(document.getElementById("row_"+ (+numLine+1) + "-cel_"+i));
+        
+        for(index in possibilitiesLines){
+            if(possibilitiesLines[index] == null){
+                continue;
+            }
+            //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
+        possibilitiesLines[index].style.backgroundColor = "yellow";
+            markPossibilityPlay(possibilitiesLines[index]);
+        }
+    }
 }
 
 //====================================
