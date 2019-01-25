@@ -1,17 +1,21 @@
 //INICIA O JOGO
 function gameStart(){
+    //COLOCARÁ MÉTODO choosePiece EM TODAS AS CASAS DO TABULEIRO
+    putMethodChoosePiece();
+    //COLOCA AS PEÇAS NO TABULEIRO
+    putPieces();
+}
+
+function putPieces(){
     //LINHAS DO TIME NO TABULEIRO
     var line_1, line_2;
-    
+        
     //RECEBERÁ QUAL TIME A PEÇA FAZ PARTE
     var time_color;
-    
+
     //TIPO DE PEÇA
     var piece_type;
 
-    //COLOCARÁ MÉTODO choosePiece EM TODAS AS CASAS DO TABULEIRO
-    putMethodChoosePiece();
-    
     //FOR QUE PERCORRERÁ DUAS VEZES, PARA COLOCAR OS DOIS TIMES(TIME PRETO E TIME BRANCO)
     for(var j = 0; j<2;j++){
         //VARIÁVEL QUE INFORMARÁ A COR DA PEÇA
@@ -137,27 +141,18 @@ function showAvailablePlays(instance_piece, piece){
     switch(piece){
         case "peao":
             possiblePlaysPawn.call(this, instance_piece);
-            
         break;
-            
         case "torre":
             possiblePlaysTower.call(this, instance_piece);
-            
         break;
-            
         case "cavalo":
             possiblePlaysHorse.call(this, instance_piece);
-            
         break;
-            
         case "bispo":
             possiblePlaysBishop.call(this, instance_piece);
-            
-        break;
-            
+        break;  
         case "rainha":
             possiblePlaysQueen.call(this, instance_piece);
-            
         break;
         case "rei":
             possiblePlaysKing.call(this, instance_piece);       
@@ -314,11 +309,10 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
                         markPossibilityPlay(possibility);    
                     }
                 }    
-            }
-            
+            }  
         }
     }
-
+    
     if( numberPossibilities() == 0 ){
         closePlay(instance_piece);
         alert("A peça escolhida não pode ser movida! Escolha outra peça!");
