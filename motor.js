@@ -164,6 +164,11 @@ function showAvailablePlays(instance_piece, piece){
         case "rei":
             possiblePlaysKing.call(this, instance_piece);       
     }
+
+    if( numberPossibilities() == 0 ){
+        closePlay(instance_piece);
+        alert("A peça escolhida não pode ser movida! Escolha outra peça!");
+    }
 }
 
 /**
@@ -333,11 +338,6 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
             }  
         }
     }
-
-    if( numberPossibilities() == 0 ){
-        closePlay(instance_piece);
-        alert("A peça escolhida não pode ser movida! Escolha outra peça!");
-    }
 }
 
 /**
@@ -399,10 +399,6 @@ function possiblePlaysHorse(instance_piece){
                 }
             }
         }
-    }
-    if( numberPossibilities() == 0 ){
-        closePlay(instance_piece);
-        alert("A peça escolhida não pode ser movida! Escolha outra peça!");
     }
 }
 
@@ -486,12 +482,7 @@ function possiblePlaysTower(instance_piece){
                 }
             }    
         }
-    }
-    
-    if( numberPossibilities() == 0 ){
-        closePlay(instance_piece);
-        alert("A peça escolhida não pode ser movida! Escolha outra peça!");
-    }    
+    }   
 }
 
 /**
@@ -581,11 +572,6 @@ function possiblePlaysBishop(instance_piece){
             therePossibilities = false;
         }    
     }while(therePossibilities);
-    
-    if( numberPossibilities() == 0 ){
-        closePlay(instance_piece);
-        alert("A peça escolhida não pode ser movida! Escolha outra peça!");
-    }
 }
 
 /**
@@ -616,12 +602,10 @@ function possiblePlaysKing(instance_piece, moveTwo = false){
             if(possibilitiesLines[index] == null){
                 continue;
             }
-            markPossibilityPlay(possibilitiesLines[index]);
+            if(possibilitiesLines[index].children[0] === undefined){
+                markPossibilityPlay(possibilitiesLines[index]);
+            }
         }
-    }
-
-    if(numberPossibilities() == 0){
-        closePlay(instance_piece);
     }
 }
 
