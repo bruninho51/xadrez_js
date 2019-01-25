@@ -1,4 +1,9 @@
-//INICIA O JOGO
+
+/**
+ * Inicia o jogo
+ * 
+ * @return {void}
+ */
 function gameStart(){
     //COLOCARÁ MÉTODO choosePiece EM TODAS AS CASAS DO TABULEIRO
     putMethodChoosePiece();
@@ -8,6 +13,8 @@ function gameStart(){
 
 /**
  * Responsável por colocar as peças no tabuleiro
+ * 
+ * @return {void}
  */
 function putPieces(){
     //LINHAS DO TIME NO TABULEIRO
@@ -96,6 +103,8 @@ function putPieces(){
 
 /**
  * Seleciona casa, marca possibilidades de jogada e realiza a jogada
+ * 
+ * @return {void}
  */
 function choosePiece(){
     //VARIÁVEL QUE RECEBERÁ IMG DA PEÇA, CASO HOUVER
@@ -141,6 +150,11 @@ function choosePiece(){
 
 /**
  * Analisa as possibilidades de jogada da peça escolhida
+ * 
+ * @param {HTMLImageElement} instance_piece
+ * @param {String} piece Nome da peça
+ * 
+ * @return {void}
  */
 function showAvailablePlays(instance_piece, piece){
     //SWITCH RESPONSÁVEL POR VERIFICAR O TIPO DE PEÇA ESCOLHIDA E QUAIS SÃO OS MOVIMENTOS POSSÍVEIS PARA ELA
@@ -174,6 +188,10 @@ function showAvailablePlays(instance_piece, piece){
 /**
  * Função que realiza a jogada. 
  * É chamada pelo choosePieace quando o jogador clica em uma casa com possibilidade de jogada
+ * 
+ * @param {HTMLTableDataCellElement} casa_escolhida Célula onde a peça está
+ * 
+ * @return {void}
  */
 function makeMove(casa_escolhida){
     if(!casa_escolhida.dataset.possibility == "1"){
@@ -200,6 +218,8 @@ function makeMove(casa_escolhida){
 
 /**
  * Coloca a função choosePiece no onclick de todas as casas do tabuleiro
+ * 
+ * @return {void}
  */
 function putMethodChoosePiece(){
     for(i=1;i<9;i++){
@@ -214,6 +234,10 @@ function putMethodChoosePiece(){
 
 /**
  * Função que marca uma casa como uma possível jogada 
+ * 
+ * @param {HTMLTableDataCellElement} possibility Célula cuja jogada é possível
+ * 
+ * @return {void}
  */
 function markPossibilityPlay(possibility){
     var attr = document.createAttribute("data-possibility");
@@ -223,6 +247,8 @@ function markPossibilityPlay(possibility){
 
 /**
  * Retorna o número de possibilidades maracadas para a jogada
+ * 
+ * @return {Integer}
  */
 function numberPossibilities(){
     var possibilities = document.querySelectorAll("td[data-possibility='1']");
@@ -231,6 +257,11 @@ function numberPossibilities(){
 
 /**
  * Encerra a jogada, podendo ou não passar a vez para o outro time
+ * 
+ * @param {HTMLImageElement} selected_piece
+ * @param {Boolean} playedTaken Se verdadeiro, passa a vez para o time adversário
+ * 
+ * @return {void}
  */
 function closePlay(selected_piece, playedTaken = false){
     
@@ -268,6 +299,11 @@ function closePlay(selected_piece, playedTaken = false){
 /**
  * Calcula as possibilidades de jogada de um peão e marca as casas usando o markPossibilityPlay.
  * É usado pelo showAvailablePlays
+ * 
+ * @param {HTMLImageElement} instance_piece
+ * @param {Boolean} moveTwo Se verdadeiro, peão poderá andar duas casas para frente
+ * 
+ * @return {void}
  */
 function possiblePlaysPawn(instance_piece, moveTwo = true){
     //CORDENADAS DAS PEÇAS NO TABUIRO
@@ -343,6 +379,10 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
 /**
  * Calcula as possibilidades de jogada de um cavalo e marca as casas usando o markPossibilityPlay.
  * É usado pelo showAvailablePlays
+ * 
+ * @param {HTMLImageElement} instance_piece
+ * 
+ * @return {void}
  */
 function possiblePlaysHorse(instance_piece){
     //PEGANDO AS COORDENADAS DA PEÇA ESCOLHIDA
@@ -405,6 +445,10 @@ function possiblePlaysHorse(instance_piece){
 /**
  * Calcula as possibilidades de jogada de uma torre e marca as casas usando o markPossibilityPlay.
  * É usado pelo showAvailablePlays
+ * 
+ * @param {HTMLImageElement} instance_piece
+ * 
+ * @return {void}
  */
 function possiblePlaysTower(instance_piece){
     //----------------------------------//
@@ -488,6 +532,10 @@ function possiblePlaysTower(instance_piece){
 /**
  * Calcula as possibilidades de jogada de um bispo e marca as casas usando o markPossibilityPlay.
  * É usado pelo showAvailablePlays
+ * 
+ * @param {HTMLImageElement} instance_piece
+ * 
+ * @return {void}
  */
 function possiblePlaysBishop(instance_piece){
     //CORDENADAS DAS PEÇAS NO TABUIRO.
@@ -577,6 +625,10 @@ function possiblePlaysBishop(instance_piece){
 /**
  * Calcula as possibilidades de jogada de uma rainha e marca as casas usando o markPossibilityPlay.
  * É usado pelo showAvailablePlays
+ * 
+ * @param {HTTMLImageElement} instance_piece
+ * 
+ * @return {void}
  */
 function possiblePlaysQueen(instance_piece){
     possiblePlaysBishop(instance_piece);
@@ -586,8 +638,12 @@ function possiblePlaysQueen(instance_piece){
 /**
  * Calcula as possibilidades de jogada de um rei e marca as casas usando o markPossibilityPlay.
  * É usado pelo showAvailablePlays
+ * 
+ * @param {HTMLImageElement} instance_piece
+ * 
+ * @return {void}
  */
-function possiblePlaysKing(instance_piece, moveTwo = false){
+function possiblePlaysKing(instance_piece){
     //CORDENADAS DAS PEÇAS NO TABUIRO
     var numLine = numLinePiece(instance_piece);
     var numCel = numCelPiece(instance_piece);
@@ -614,7 +670,10 @@ function possiblePlaysKing(instance_piece, moveTwo = false){
 //====================================
 
 /**
- * Retorna o número da linha onde a peça se encontra 
+ * Retorna o número da linha onde a peça se encontra
+ * 
+ * @param {HTMLImageElement} instance_piece
+ * @return {Integer} 
  */
 function numLinePiece(instance_piece){
     return +(instance_piece.parentElement.id).split("-")[0].split("_")[1]; 
@@ -622,6 +681,8 @@ function numLinePiece(instance_piece){
 
 /**
  * Retorna o número da célula onde a peça se encontra 
+ * @param {HTMLImageElement} instance_piece
+ * @return {Integer}
  */
 function numCelPiece(instance_piece){
     return +(instance_piece.parentElement.id).split("-")[1].split("_")[1];
