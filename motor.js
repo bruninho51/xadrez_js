@@ -33,45 +33,28 @@ function gameStart(){
             var link_imagem;
             //CAMPO FLAG QUE AVISARÁ PARA O PROGRAMA QUE PASSAMOS PARA A SEGUNDA LINHA(A DOS PEÕES)
             var line = 'l1';
-            switch(true){
-                //TORRES
-                case (i==0 || i==7):
-                    link_imagem = "img/if_" + color + "_rook.png";
-                    piece_type = "torre";
-                break;
 
-                //CAVALOS
-                case (i==1 || i==6):
-                    link_imagem = "img/if_" + color + "_knight.png";
-                    piece_type = "cavalo";
-                break;
-
-                //BISPOS
-                case (i==2 || i==5):
-                    link_imagem = "img/if_" + color + "_bishop.png";
-                    piece_type = "bispo";
-                break;
-
-                //RAINHA    
-                case (i==3):
-                    link_imagem = "img/if_" + color + "_queen.png";
-                    piece_type = "rainha";
-                break;
-
-                //REI
-                case (i==4):
-                    link_imagem = "img/if_" + color + "_king.png";
-                    piece_type = "rei";
-                break;
-
-                //PEÕES
-                case (i>7 && i<16):
-                    link_imagem = "img/if_" + color + "_pawn.png";
-                    piece_type = "peao";
-                    line = 'l2';
-                break;
-
+            if(i==0 || i==7){ //TORRE
+                link_imagem = "img/if_" + color + "_rook.png";
+                piece_type = "torre";
+            }else if(i==1 || i==6){ //CAVALO
+                link_imagem = "img/if_" + color + "_knight.png";
+                piece_type = "cavalo";
+            }else if(i==2 || i==5){ //BISPO
+                link_imagem = "img/if_" + color + "_bishop.png";
+                piece_type = "bispo";
+            }else if(i==3){ //RAINHA
+                link_imagem = "img/if_" + color + "_queen.png";
+                piece_type = "rainha";
+            }else if(i==4){ //REI
+                link_imagem = "img/if_" + color + "_king.png";
+                piece_type = "rei";
+            }else if(i>7 && i<16){ //PEÃO
+                link_imagem = "img/if_" + color + "_pawn.png";
+                piece_type = "peao";
+                line = 'l2';
             }
+
             //CRIANDO ELEMENTO IMG
             var img = document.createElement("img");
             //CRIANDO ATRIBUTO SRC PARA IMG
@@ -80,7 +63,7 @@ function gameStart(){
             src.value = link_imagem;
             //CRIANDO ATRIBUTO PEÇA PARA IMG
             var piece = document.createAttribute("data-piece");
-            //SETANDO SRC COM O TIPO DE PEÇA REPRESENTADO PELA IMAGEM
+            //SETANDO ATRIBUTO PEÇA COM O TIPO DE PEÇA REPRESENTADO PELA IMAGEM
             piece.value = piece_type;
             //CRIANDO ATRIBUTO TIME PARA IMG
             var time_peca = document.createAttribute("data-time");
@@ -90,11 +73,6 @@ function gameStart(){
             img.setAttributeNode(src);
             img.setAttributeNode(piece);
             img.setAttributeNode(time_peca);
-            
-            //EVENTO CLICK IMG
-            //img.addEventListener("click", function(){
-            //    choosePiece.call(this);
-            //});
 
             //ADICIONANDO IMG À CÉLULA
             if(line == "l1"){
@@ -105,10 +83,8 @@ function gameStart(){
                 //ASSIM O ÍNDICE DA CASA FICARÁ CORRETO
                 line_2.children[i - 8].appendChild(img);     
             }
-
         }
     }
-    
 }
 
 //SELECIONA PEÇA CLICADA
@@ -202,10 +178,8 @@ function showAvailablePlays(instance_piece, piece){
             
         break;
         case "rei":
-            possiblePlaysKing.call(this, instance_piece);
-            
+            possiblePlaysKing.call(this, instance_piece);       
     }
-    
 }
 
 //FUNÇÃO RESPONSÁVEL POR FAZER A JOGADA
@@ -228,40 +202,8 @@ function makeMove(casa_escolhida){
            //MOVENDO PEÇA PARA CASA ESCOLHIDA
            casa_escolhida.appendChild(selected_piece);
         }
-        
-        /*
-                            //----------------------------------------
-                            //-----LIMPANDO E TERMINANDO A JOGADA-----
-                            //----------------------------------------
-        
-        //REMOVE CSS INLINE DA PEÇA.(ESSE CSS MOSTRAVA QUE A PEÇA FOI SELECIONADA)
-        selected_piece.removeAttribute("style");
-        //LIMPA POSIBILIDADES DE JOGADA
-        var possibilities = document.querySelectorAll("td[data-possibility='1']");
-        possibilities.forEach(function(possibility){
-            possibility.removeAttribute("data-possibility");
-        });
-        //DESSELECIONA PEÇA SELECIONADA ANTERIORMENTE
-        selected_piece.removeAttribute("data-select");
-        //TERMINA A JOGADA
-        document.getElementById("jogada").value = "0";
-        
-                            //----------------------------------------
-                            //----------------------------------------
-        
-        //VEZ DO OUTRO TIME
-        var time_vez;
-        if(document.getElementById("vez").value == "white"){
-            time_vez = "black";
-        }else{
-            time_vez = "white";
-        }
-        document.getElementById("vez").value = time_vez;*/
         closePlay(selected_piece, true);
-        
-        
     }
-    
 }
 
 //MÉTODO RESPONSÁVEL POR COLOCAR choosePiece MÉTODO EM TODAS AS CASAS DO TABULEIRO
@@ -358,13 +300,10 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
         //SERVIRÁ PARA VERIFICAR SE PEÇA ADVERSÁRIA OBSTRUI CAMPO À FRENTE DO PEÃO
         var obstructionTheFront = (possibility.children[0] != undefined);
 
-
         if( !(i == numCel && obstructionTheFront) ){
             //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
             markPossibilityPlay(possibility);
         }
-
-
 
         //TESTA PARA SABER SE CÉLULA ANALISADA É A CÉLULA QUE ESTÁ À FRENTE DA PEÇA SELECIONADA
         if(i == numCel){
@@ -406,7 +345,6 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
             }
             
         }
-
     }
 
     if( numberPossibilities() == 0 ){
@@ -435,8 +373,7 @@ function possiblePlaysHorse(instance_piece){
                 var possibilities = [];
                 possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel-1))); 
                 possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel+1)));    
-            }
-           
+            }  
             
            //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
             for(k=0; k<possibilities.length;k++){
@@ -447,9 +384,7 @@ function possiblePlaysHorse(instance_piece){
                         markPossibilityPlay(possibilities[k]);
                     }  
                 }
-            
             }
-            
             
         }else if(i == 3 || i == 4){
             var line = numLine+(i-2); //LINHA ABAIXO DA PEÇA
@@ -464,37 +399,29 @@ function possiblePlaysHorse(instance_piece){
                 possibilities.push(document.getElementById("row_"+ (line) + "-cel_"+ (numCel+1)));    
             }
         
-            
            //VERIFICA SE EXISTE UMA PEÇA NA CASA ONDE TEORICAMENTE A PEÇA PODERIA SE MOVER
             for(k=0;k<possibilities.length;k++){
                 
                 if(possibilities[k] != null){
                     if(possibilities[k].children[0] == undefined || possibilities[k].children[0].dataset.time != document.getElementById("vez").value){
                         markPossibilityPlay(possibilities[k]);
-                    }
-                    
+                    }            
                 }
-                    
             }
-            
         }
-        
     }
     if( numberPossibilities() == 0 ){
         closePlay(instance_piece);
         alert("A peça escolhida não pode ser movida! Escolha outra peça!");
     }
-    
 }
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UMA TORRE
 function possiblePlaysTower(instance_piece){
-    
     //----------------------------------//
     //------REFATORAÇÃO BEM VINDA :)----//
     //----------------------------------//
     
-    //alert("entrando no metodo");
     //CORDENADAS DAS PEÇAS NO TABUIRO
     var numLine = numLinePiece(instance_piece);
     var numCel = numCelPiece(instance_piece);
@@ -521,29 +448,19 @@ function possiblePlaysTower(instance_piece){
 
             //IF RESPONSÁVEL POR TROCAR numCel POR numLine, NO SEGUNDO LOOP DO PRIMEIRO FOR, PARA QUE ESTRUTURA PERCORRA COM BASE NAS LINHAS, E NÃO MAIS COM BASE NAS COLUNAS.
             if(k==1){
-                
                 if(j == 0){
                     i = numLine+1;
-                    //alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
                 }else{
                     i = numLine-1;
-                    //alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
                 }
-                
             }else{
-            
                 if(j == 0){
                     i = numCel+1;
-                    //alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
+                    
                 }else{
                     i = numCel-1;
-                    //alert("No if os valores de i e j são, respectivamente: " + i + ", " + j);
                 }
-                
             }
-            
-            
-            //alert("Antes do for, j vale " + j);
 
             //RETORNA CONDIÇÃO PARA QUE FOR CONTINUE RODANDO. SE CHAMA FINAL POIS CONTROLA O NÚMERO FINAL QUE O FOR PODERÁ EXECUTAR!
             //ALÉM DE TROCAR VALOR FINAL DO FOR, ELE MUDA A CONDIÇÃO DE <= PARA >=. JUNTAMENTE COM INCREDECRE, PERMITIRÁ QUE O FOR SEJA INVERTIDO E PERCORRA A "CONTRAFILEIRA" NO SEGUNDO LOOP DO FOR ACIMA
@@ -551,26 +468,19 @@ function possiblePlaysTower(instance_piece){
 
             //FOR QUE PERCORRERÁ UMA FILEIRA
             for(i; final(i); increDecre()){
-
                 //TRATA CASO i SEJA IGUAL A ZERO(i==0 SIGNIFICA QUE PEÇA ESTÁ NO CANTO DO TABULEIRO E NÃO HÁ COMO ANDAR PARA TRÁS)
                 if(i==0){
                    break;
                 }
-
-                //alert("Esse é o j: " + j + ".Estamos no for :)");
-                
                 
                 //SE K == 1, NÚMERO DA CÉLULA SERÁ A MESMA E NÚMERO DE LINHA MUDARÁ(FOR PERCORRERÁ AS LINHAS À PROCURA DE POSSIBILIDADES DE JOGADA)
                 if(k==1){
-                        var id = "row_"+ i + "-cel_"+numCel;
-                    
+                    var id = "row_"+ i + "-cel_"+numCel;
                     //SE K != 1, NÚMERO DA LINHA SERÁ A MESMA E NÚMERO DA CÉLULA MUDARÁ(FOR PERCORRERÁ AS CÉLULAS AO LADO DA PEÇA A PROCURA DE POSSIBILIDADES DE JOGADA)
-                   }else{ 
-                       var id = "row_"+ numLine + "-cel_"+i;
-                   }
+                }else{ 
+                    var id = "row_"+ numLine + "-cel_"+i;
+                }
                    
-                
-                //alert(id);
                 //POSSIBILITY RECEBERÁ INSTÂNCIA DAS CÉLULAS À FRENTE DA PEÇA ONDE MOVIMENTO DA PEÇA SELECIONADA É POSSÍVEL
                 var possibility = document.getElementById(id);
 
@@ -578,12 +488,9 @@ function possiblePlaysTower(instance_piece){
                 if(possibility.children[0] == undefined || possibility.children[0].dataset.time != document.getElementById("vez").value){
                     //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
                     markPossibilityPlay(possibility);
-
                 }else{
                     break;
-
                 }
-
             }    
         }
     }
@@ -591,9 +498,7 @@ function possiblePlaysTower(instance_piece){
     if( numberPossibilities() == 0 ){
         closePlay(instance_piece);
         alert("A peça escolhida não pode ser movida! Escolha outra peça!");
-    }
-    
-        
+    }    
 }
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UM BISPO
@@ -619,7 +524,6 @@ function possiblePlaysBishop(instance_piece){
     
     //DO...WHILE PERCORRERÁ DIAGONAIS À PROCURA DE POSSIBILIDADES DE JOGADA.
     do{
-            
         //FOR QUE PERCORRE DUAS VEZES PARA QUE DUAS LINHAS SEJAM ANALISADAS. UMA LINHA AO NORTE DA PEÇA, E A OUTRA A LINHA ESPELHADA, AO SUL.
         for(j=0;j<2;j++){
             //CONTROLA SE A LINHA ANALISADA SERÁ A QUE SE ENCONTRA AO NORTE OU A SUA LINHA ESPELHO, AO SUL DA PEÇA.
@@ -631,27 +535,21 @@ function possiblePlaysBishop(instance_piece){
 
             //FOR QUE PERCORRE DUAS VEZES PARA QUE DUAS CÉLULAS DE UMA LINHA SEJAM MARCADAS. UMA CÉLULA À ESQUERDA DA PEÇA, E A CÉLULA ESPELO À DIREITA DA PEÇA.
             for(i=0;i<2;i++){
-                
-                
                 //CONTROLA SE A CÉLULA ANALISADA NA LINHA SERÁ A QUE SE ENCONTRA À ESQUERDA OU À DIREITA DA PEÇA.
                 //TERNÁRIO QUE IMPEDE PRÉ-DECREMENTO OU PRÉ-INCREMENTO DAS CÉLULAS, VISTO QUE AS COORDENADAS DAS CÉLULAS QUE SERÃO MARCADAS SÃO AS MESMAS TANTO PARA A LINHA NORTE, QUANDO PARA A LINHA ESPELHO NO SUL.
                 if(i==0){
                     var cel = (j==0) ? --celEsq : celEsq;
-
                 }else if(i==1){
                     var cel = (j==0) ? ++celDir : celDir;
-
                 }    
                 
                 //ESTRUTURA RESPONSÁVEL POR BLOQUEAR ANÁLISE DAS DIAGONAIS, QUANDO ENCONTRA OBSTRUÇÃO
                 if(j==0){
                     if(diagObst[i] == 1){
-                        //alert(i);
                         continue;
                     }
                 }else if(j==1){
                     if(diagObst[i+2] == 1){
-                        //alert(i);
                         continue;
                     }
                 }
@@ -666,8 +564,6 @@ function possiblePlaysBishop(instance_piece){
                     if(possibility.children[0] != undefined && possibility.children[0].dataset.time == document.getElementById("vez").value){
                         //TERNÁRIO
                         (j==0) ? (diagObst[i] = 1) : (diagObst[i+2] = 1);
-                        
-
                     }else{
                         //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
                         markPossibilityPlay(possibility);
@@ -676,30 +572,24 @@ function possiblePlaysBishop(instance_piece){
                             (j==0) ? (diagObst[i] = 1) : (diagObst[i+2] = 1);
                         }
                     }    
-                    
                 }else{
                     ++erro;
                     (j==0) ? (diagObst[i] = 1) : (diagObst[i+2] = 1);
-                }    
-
+                }
             }    
         }
         
         //SE AS 4 CASAS ANALISADAS PELA ESTRUTURA DEREM ERRO, SIGNIFICA QUE NÃO HÁ MAIS POSSIBILIDADES DE JOGADA, POIS AS 4 DIAGONAIS ESTÃO OBSTRUÍDAS. CASO CONTRÁRIO, ERRO RECEBE 0, E A ESTRUTURA É EXECUTADA NOVAMENTE ATÉ ERRO SER IGUAL A 4.
-        //alert(diagObst);
-        
         diagObst.every
         if(diagObst.every(diag => diag == 1)){
             therePossibilities = false;
-        }
-            
+        }    
     }while(therePossibilities);
     
     if( numberPossibilities() == 0 ){
         closePlay(instance_piece);
         alert("A peça escolhida não pode ser movida! Escolha outra peça!");
     }
-    
 }
 
 //CALCULA POSSIBILIDADES DE JOGADA DE UMA RAINHA
