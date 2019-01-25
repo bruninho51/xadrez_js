@@ -6,6 +6,9 @@ function gameStart(){
     putPieces();
 }
 
+/**
+ * Responsável por colocar as peças no tabuleiro
+ */
 function putPieces(){
     //LINHAS DO TIME NO TABULEIRO
     var line_1, line_2;
@@ -91,7 +94,9 @@ function putPieces(){
     }
 }
 
-//SELECIONA PEÇA CLICADA
+/**
+ * Seleciona casa, marca possibilidades de jogada e realiza a jogada
+ */
 function choosePiece(){
     //VARIÁVEL QUE RECEBERÁ IMG DA PEÇA, CASO HOUVER
     var img_piece = this.children[0];
@@ -134,7 +139,9 @@ function choosePiece(){
     }
 }
 
-//RESPONSÁVEL POR ANÁLISAR JOGADAS DISPONÍVEIS
+/**
+ * Analisa as possibilidades de jogada da peça escolhida
+ */
 function showAvailablePlays(instance_piece, piece){
     //SWITCH RESPONSÁVEL POR VERIFICAR O TIPO DE PEÇA ESCOLHIDA E QUAIS SÃO OS MOVIMENTOS POSSÍVEIS PARA ELA
     //IRÁ MARCAR AS CASAS CUJA PEÇA PODE IR
@@ -159,7 +166,10 @@ function showAvailablePlays(instance_piece, piece){
     }
 }
 
-//FUNÇÃO RESPONSÁVEL POR FAZER A JOGADA
+/**
+ * Função que realiza a jogada. 
+ * É chamada pelo choosePieace quando o jogador clica em uma casa com possibilidade de jogada
+ */
 function makeMove(casa_escolhida){
     if(!casa_escolhida.dataset.possibility == "1"){
         alert("Jogada inválida! Escolha outra casa!");
@@ -183,7 +193,9 @@ function makeMove(casa_escolhida){
     }
 }
 
-//MÉTODO RESPONSÁVEL POR COLOCAR choosePiece MÉTODO EM TODAS AS CASAS DO TABULEIRO
+/**
+ * Coloca a função choosePiece no onclick de todas as casas do tabuleiro
+ */
 function putMethodChoosePiece(){
     for(i=1;i<9;i++){
         var line = document.getElementById('row_'+i);
@@ -195,20 +207,26 @@ function putMethodChoosePiece(){
     }
 }
 
-//FUNÇÃO QUE MARCA UMA CASA DO TABULEIRO COMO POSSÍVEL JOGADA
+/**
+ * Função que marca uma casa como uma possível jogada 
+ */
 function markPossibilityPlay(possibility){
     var attr = document.createAttribute("data-possibility");
     attr.value = "1";
     possibility.setAttributeNode(attr);
 }
 
-//RETORNA NÚMERO DE POSSIBILIDADES MARCADAS PARA A JOGADA
+/**
+ * Retorna o número de possibilidades maracadas para a jogada
+ */
 function numberPossibilities(){
     var possibilities = document.querySelectorAll("td[data-possibility='1']");
     return possibilities.length;
 }
 
-//ENCERRA A JOGADA. SE O SEGUNDO PARÂMETRO FOR TRUE, A VEZ É PASSADA
+/**
+ * Encerra a jogada, podendo ou não passar a vez para o outro time
+ */
 function closePlay(selected_piece, playedTaken = false){
     
     //REMOVE CSS INLINE DA PEÇA.(ESSE CSS MOSTRAVA QUE A PEÇA FOI SELECIONADA)
@@ -242,7 +260,10 @@ function closePlay(selected_piece, playedTaken = false){
 //===========REGRAS DO JOGO===========
 //====================================
 
-//CALCULA POSSIBILIDADES DE JOGADA DE UM PEÃO
+/**
+ * Calcula as possibilidades de jogada de um peão e marca as casas usando o markPossibilityPlay.
+ * É usado pelo showAvailablePlays
+ */
 function possiblePlaysPawn(instance_piece, moveTwo = true){
     //CORDENADAS DAS PEÇAS NO TABUIRO
     var numLine = numLinePiece(instance_piece);
@@ -312,14 +333,17 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
             }  
         }
     }
-    
+
     if( numberPossibilities() == 0 ){
         closePlay(instance_piece);
         alert("A peça escolhida não pode ser movida! Escolha outra peça!");
     }
 }
 
-//CALCULA POSSIBILIDADES DE JOGADA DE UM CAVALO
+/**
+ * Calcula as possibilidades de jogada de um cavalo e marca as casas usando o markPossibilityPlay.
+ * É usado pelo showAvailablePlays
+ */
 function possiblePlaysHorse(instance_piece){
     //PEGANDO AS COORDENADAS DA PEÇA ESCOLHIDA
     var numLine = numLinePiece(instance_piece);
@@ -382,7 +406,10 @@ function possiblePlaysHorse(instance_piece){
     }
 }
 
-//CALCULA POSSIBILIDADES DE JOGADA DE UMA TORRE
+/**
+ * Calcula as possibilidades de jogada de uma torre e marca as casas usando o markPossibilityPlay.
+ * É usado pelo showAvailablePlays
+ */
 function possiblePlaysTower(instance_piece){
     //----------------------------------//
     //------REFATORAÇÃO BEM VINDA :)----//
@@ -467,7 +494,10 @@ function possiblePlaysTower(instance_piece){
     }    
 }
 
-//CALCULA POSSIBILIDADES DE JOGADA DE UM BISPO
+/**
+ * Calcula as possibilidades de jogada de um bispo e marca as casas usando o markPossibilityPlay.
+ * É usado pelo showAvailablePlays
+ */
 function possiblePlaysBishop(instance_piece){
     //CORDENADAS DAS PEÇAS NO TABUIRO.
     var numLine = numLinePiece(instance_piece);
@@ -558,13 +588,19 @@ function possiblePlaysBishop(instance_piece){
     }
 }
 
-//CALCULA POSSIBILIDADES DE JOGADA DE UMA RAINHA
+/**
+ * Calcula as possibilidades de jogada de uma rainha e marca as casas usando o markPossibilityPlay.
+ * É usado pelo showAvailablePlays
+ */
 function possiblePlaysQueen(instance_piece){
     possiblePlaysBishop(instance_piece);
     possiblePlaysTower(instance_piece);
 }
 
-//CALCULA POSSIBILIDADES DE JOGADA DE UM REI
+/**
+ * Calcula as possibilidades de jogada de um rei e marca as casas usando o markPossibilityPlay.
+ * É usado pelo showAvailablePlays
+ */
 function possiblePlaysKing(instance_piece, moveTwo = false){
     //CORDENADAS DAS PEÇAS NO TABUIRO
     var numLine = numLinePiece(instance_piece);
@@ -583,18 +619,26 @@ function possiblePlaysKing(instance_piece, moveTwo = false){
             markPossibilityPlay(possibilitiesLines[index]);
         }
     }
+
+    if(numberPossibilities() == 0){
+        closePlay(instance_piece);
+    }
 }
 
 //====================================
 //=========FIM REGRAS DO JOGO=========
 //====================================
 
-//RETORNA NÚMERO DA LINHA ONDE A PEÇA SE ENCONTRA
+/**
+ * Retorna o número da linha onde a peça se encontra 
+ */
 function numLinePiece(instance_piece){
     return +(instance_piece.parentElement.id).split("-")[0].split("_")[1]; 
 }
 
-//RETORNA NÚMERO DA CÉLULA ONDE A PEÇA SE ENCONTRA
+/**
+ * Retorna o número da célula onde a peça se encontra 
+ */
 function numCelPiece(instance_piece){
     return +(instance_piece.parentElement.id).split("-")[1].split("_")[1];
 }
