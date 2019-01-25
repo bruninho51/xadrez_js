@@ -107,8 +107,6 @@ function choosePiece(){
                 var attr_style = document.createAttribute("style");
                 attr_style.value = "background-color: rgba(0,255,0, 0.9); border: 2px double yellow";
                 img_piece.setAttributeNode(attr_style);
-                //img_piece.parentElement.style.backgroundColor = "rgba(0,255,0, 0.9)";
-                //img_piece.parentElement.style.border = "2px double yellow";
 
                 //CRIANDO ATRIBUTO PARA MARCAR PEÇA COMO SELECIONADA
                 var attr = document.createAttribute("data-select");
@@ -116,10 +114,9 @@ function choosePiece(){
                 img_piece.setAttributeNode(attr);
 
                 var piece = img_piece.dataset.piece; //NOME DA PEÇA
-                //MOSTRA CAMPOS QUE A PEÇA PODE IR
-                
-                showAvailablePlays(img_piece, piece);
 
+                //MARCA CAMPOS QUE A PEÇA PODE IR
+                showAvailablePlays(img_piece, piece);
             }else{
                 alert("Escolha uma peça do seu time!");
             }
@@ -130,28 +127,13 @@ function choosePiece(){
         }else{
             makeMove(this);
         }
-
     }
 }
 
 //RESPONSÁVEL POR ANÁLISAR JOGADAS DISPONÍVEIS
 function showAvailablePlays(instance_piece, piece){
-    //var id_piece, id_row, id_cel;
-    var num_line, num_cel;
-    //PEGANDO ID DA CASA ONDE ESTÁ A PEÇA
-    //id_piece = instance_piece.parentElement.id;
-    //USANDO ID PARA PEGAR COORDENADAS DA PEÇA NO TABULEIRO
-    //var arr = id_piece.split("-");
-    //id_row = arr[0];
-    //id_cel = arr[1];
-    //PEGANDO NÚMERO DA LINHA ONDE A PEÇA ESCOLHIDA SE ENCONTRA
-    //num_line = id_row.split("_")[1];
-    //PEGANDO NÚMERO DA CÉLULA ONDE A PEÇA ESCOLHIDA SE ENCONTRA
-    //num_cel = id_cel.split("_")[1];
-    
     //SWITCH RESPONSÁVEL POR VERIFICAR O TIPO DE PEÇA ESCOLHIDA E QUAIS SÃO OS MOVIMENTOS POSSÍVEIS PARA ELA
     //IRÁ MARCAR AS CASAS CUJA PEÇA PODE IR
-    
     switch(piece){
         case "peao":
             possiblePlaysPawn.call(this, instance_piece);
@@ -228,7 +210,6 @@ function markPossibilityPlay(possibility){
 //RETORNA NÚMERO DE POSSIBILIDADES MARCADAS PARA A JOGADA
 function numberPossibilities(){
     var possibilities = document.querySelectorAll("td[data-possibility='1']");
-    //alert( possibilities.length );
     return possibilities.length;
 }
 
@@ -259,7 +240,6 @@ function closePlay(selected_piece, playedTaken = false){
             document.getElementById("img_vez").src = "img/if_white_king.png";
         }
         document.getElementById("vez").value = time_vez;
-        
     }
 }
 
@@ -282,7 +262,6 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
             var possibility = document.getElementById("row_"+ (+numLine-1) + "-cel_"+i);
         }
 
-
         if(possibility == null){
             continue;
         }
@@ -293,9 +272,6 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
                 continue;
             }  
         }
-
-        //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
-        //possibility.style.backgroundColor = "yellow";
 
         //SERVIRÁ PARA VERIFICAR SE PEÇA ADVERSÁRIA OBSTRUI CAMPO À FRENTE DO PEÃO
         var obstructionTheFront = (possibility.children[0] != undefined);
@@ -310,7 +286,6 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
             if(moveTwo){
                 //PEGA O NÚMERO DA LINHA ONDE A PEÇA SELECIONADA SE ENCONTRA
                 //O PRIMEIRO PARENT É PARA SELECIONAR A CÉLULA. O SEGUNDO PARA SELECIONAR A LINHA
-                //var line_peace = ((instance_piece.parentElement).parentElement.getAttribute("id")).split("_")[1];
 
                 //CONDIÇÕES QUE VERIFICAM SE PEÇA PRETA ESTÁ NA LINHA 7 E SE PEÇA BRANCA ESTÁ NA LINHA 2
                 //DESSA FORMA, É POSSÍVEL SABER SE É PERMITIDO QUE O PEÃO ANDE DUAS CASAS PARA FRENTE
@@ -325,7 +300,6 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
                         }else{
                             possibility = null;
                         }
-
                     }else if(document.getElementById("vez").value == "black"){
                         //SE A CASA À FRENTE ESTIVER OCUPADA, NÃO SERÁ POSSÍVEL ANDAR DUAS CASAS, VISTO QUE A PASSAGEM ESTARÁ OBSTRUÍDA
                         if(  document.getElementById("row_"+ (+numLine-1) + "-cel_"+i).children[0] == undefined  ){
@@ -333,14 +307,12 @@ function possiblePlaysPawn(instance_piece, moveTwo = true){
                         }else{
                             possibility = null;
                         }
-
                     }
 
                     //COLOCANDO ATRIBUTO QUE DIZ QUE É PERMITIDO QUE A PEÇA ANDE PARA ESTA CASA
                     if(possibility != null){
                         markPossibilityPlay(possibility);    
                     }
-
                 }    
             }
             
