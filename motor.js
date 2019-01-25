@@ -724,8 +724,6 @@ function possiblePlaysKing(instance_piece, moveTwo = false){
             if(possibilitiesLines[index] == null){
                 continue;
             }
-            //CASAS QUE A PEÇA PODE IR SÃO MARCADAS COM AMARELO
-        possibilitiesLines[index].style.backgroundColor = "yellow";
             markPossibilityPlay(possibilitiesLines[index]);
         }
     }
